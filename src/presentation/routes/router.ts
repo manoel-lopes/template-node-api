@@ -1,6 +1,6 @@
-import { HttpServer } from '@/infra/adapters/api/http-server/ports'
-import { HttpMethod } from '@/infra/adapters/api/ports'
-import { RouteHandler } from './ports'
+import type { HttpServer } from '@/infra/adapters/api/http-server/ports'
+import type { HttpMethod } from '@/infra/adapters/api/ports'
+import type { RouteHandler } from './ports'
 
 export class Router {
   constructor(private readonly httpServer: HttpServer) {}

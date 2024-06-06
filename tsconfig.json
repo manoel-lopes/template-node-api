@@ -2,14 +2,18 @@
   "compilerOptions": {
     "baseUrl": ".",
     "target": "esnext",
-    "module": "commonjs",
-    "strict": true,
     "useUnknownInCatchVariables": false,
     "noImplicitAny": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["node"],
+    "verbatimModuleSyntax": true,
+    "types": ["vitest/globals", "node"],
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
     "paths": {
       "@/*": ["src/*"]
     }

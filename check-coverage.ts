@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 import { createCoverageMap } from 'istanbul-lib-coverage'
 
 const COVERAGE_PERCENTAGE = Number(process.env.COVERAGE_PERCENTAGE) || 100

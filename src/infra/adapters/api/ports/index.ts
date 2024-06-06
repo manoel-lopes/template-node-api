@@ -1,6 +1,6 @@
 export type HttpMethod = 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE'
 
-export type HttpStatusCode = 200 | 201 | 400 | 404 | 500
+export type HttpStatusCode = 200 | 201 | 400 | 403 | 404 | 500
 
 export type HttpRequest = {
   body?: unknown
