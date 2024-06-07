@@ -1,4 +1,4 @@
-import type { ApiRequest, ApiResponse } from '@/infra/adapters/api/ports'
+import type { ApiRequest, ApiResponse } from '@/infra/adapters/http/ports'
 
 export type RouteHandler = (
   req: ApiRequest,

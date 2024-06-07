@@ -1,14 +1,14 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
-import type { HttpServer } from '@/infra/adapters/api/http-server/ports'
+import type { HttpServer } from '@/infra/adapters/http/http-server/ports'
 import type { RouteHandler } from '@/presentation/routes/ports'
 import type {
   ApiRequest,
   ApiResponse,
   HttpMethod,
   HttpStatusCode,
-} from '@/infra/adapters/api/ports'
+} from '@/infra/adapters/http/ports'
 import { env } from '@/lib/env'
 
 type ErrorHandler = (error: Error, req: ApiRequest, res: ApiResponse) => void
@@ -21,6 +21,7 @@ export class FastifyAdapter implements HttpServer {
       env.NODE_ENV === 'development' ? { logger: true } : { logger: false },
     )
     this.app.register(cors)
+    Object.freeze(this)
   }
 
   route(method: HttpMethod, url: string, handler: RouteHandler): void {

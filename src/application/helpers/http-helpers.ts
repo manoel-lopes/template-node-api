@@ -1,4 +1,4 @@
-import type { HttpResponse } from '@/infra/adapters/api/ports'
+import type { HttpResponse } from '@/infra/adapters/http/ports'
 
 export const created = (): HttpResponse => ({ statusCode: 201 })
 

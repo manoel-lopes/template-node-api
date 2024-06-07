@@ -1,4 +1,4 @@
-import { FastifyAdapter } from '@/infra/adapters/api/http-server/fasitfy-adapter'
+import { FastifyAdapter } from '@/infra/adapters/http/http-server/fasitfy-adapter'
 import { SchemaParseFailedError } from '@/infra/validation/errors'
 import { badRequest } from '@/application/helpers/http-helpers'
 

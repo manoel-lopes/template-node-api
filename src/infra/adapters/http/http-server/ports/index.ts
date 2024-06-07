@@ -1,4 +1,4 @@
-import type { HttpMethod } from '@/infra/adapters/api/ports'
+import type { HttpMethod } from '@/infra/adapters/http/ports'
 import type { RouteHandler } from '@/presentation/routes/ports'
 
 export type HttpServer = {
