@@ -1,7 +1,5 @@
-import { created } from './../../../application/helpers/http-helpers'
 import { z } from 'zod'
 import { SchemaParseFailedError } from '@/infra/validation/errors'
-import type { HttpRequest, HttpResponse } from '@/infra/adapters/http/ports'
 
 export abstract class SchemaParser {
   static parse<T>(schema: z.Schema, data: unknown): T {
