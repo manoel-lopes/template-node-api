@@ -2,7 +2,7 @@ import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import type { HttpServer } from '@/infra/adapters/http/http-server/ports'
-import type { RouteHandler } from '@/presentation/routes/ports'
+import type { RouteHandler } from '@/infra/api/ports'
 import type {
   ApiRequest,
   ApiResponse,
