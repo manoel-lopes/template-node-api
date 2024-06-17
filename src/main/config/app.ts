@@ -1,6 +1,6 @@
 import { FastifyAdapter } from '@/infra/adapters/http/http-server/fasitfy-adapter'
 import { SchemaParseFailedError } from '@/infra/validation/errors'
-import { badRequest } from '@/application/helpers/http-helpers'
+import { badRequest } from '@/presentation/helpers/http-helpers'
 
 import { setRoutes } from './routes'
 import { env } from '@/lib/env'
