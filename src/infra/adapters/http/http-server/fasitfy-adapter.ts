@@ -28,9 +28,14 @@ export class FastifyAdapter implements HttpServer {
     this.app.route({
       method,
       url,
-      handler: (req: FastifyRequest, reply: FastifyReply) => {
+      handler: async (req: FastifyRequest, reply: FastifyReply) => {
         const res = this.adaptReply(reply)
-        handler(req, res)
+        try {
+          await handler(req, res)
+        } catch (error) {
+          this.app.log.error(error)
+          reply.send(error)
+        }
       },
     })
   }
