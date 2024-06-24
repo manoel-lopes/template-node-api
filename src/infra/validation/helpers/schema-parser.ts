@@ -10,13 +10,15 @@ export abstract class SchemaParser {
       const errorMessage = message.toLowerCase()
       const isObjectParamError = path.length === 3
       if (!isObjectParamError) {
-        const param = path[0]
-        throw new SchemaParseFailedError(`${param} ${errorMessage}`)
+        const field = path[0]
+        throw new SchemaParseFailedError(
+          `Field '${field}' ${errorMessage === 'required' ? 'is ' + errorMessage : errorMessage}`,
+        )
       }
 
       const object = path[1]
-      const param = path[2]
-      throw new SchemaParseFailedError(`${object} ${param} ${errorMessage}`)
+      const field = path[2]
+      throw new SchemaParseFailedError(`${object} ${field} ${errorMessage}`)
     }
     return parsedSchema.data
   }

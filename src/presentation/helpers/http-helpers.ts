@@ -1,9 +1,6 @@
 import type { HttpResponse } from '@/infra/adapters/http/ports'
 
-export const created = (data: unknown): HttpResponse => ({
-  statusCode: 201,
-  body: data,
-})
+export const created = (): HttpResponse => ({ statusCode: 201 })
 
 export const ok = (data: unknown): HttpResponse => ({
   statusCode: 200,
