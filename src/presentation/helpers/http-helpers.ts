@@ -21,3 +21,8 @@ export const notFound = ({ message }: Error): HttpResponse => ({
   statusCode: 404,
   body: { error: { message } },
 })
+
+export const conflict = ({ message }: Error): HttpResponse => ({
+  statusCode: 409,
+  body: { error: { message } },
+})
