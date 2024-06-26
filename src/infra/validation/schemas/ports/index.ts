@@ -1,3 +1,1 @@
-export type SchemaValidator<T> = {
-  validate: (data: unknown) => T
-}
+export * from './lib/schema-validator'
