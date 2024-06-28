@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "template-node-api",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -9,13 +9,13 @@
     "build": "tsup",
     "lint": "eslint --ext .ts src --fix",
     "lint:staged": "lint-staged",
-    "prepare": "husky || true && cross-env-shell chmod ug+x .husky/*",
+    "prepare": "husky",
     "test:dir": "vitest --run --silent --reporter verbose --dir",
     "test:unit": "vitest --run --passWithNoTests --silent --reporter verbose",
     "test:e2e": "vitest --run --silent --reporter verbose --dir src/main/routes",
     "test:int": "vitest --run --passWithNoTests --no-threads --silent --reporter verbose --dir src/main/routes",
     "test:staged": "vitest related --run",
-    "test:ci": "vitest --run --silent --coverage && tsx check-coverage",
+    "test:ci": "vitest --run --silent --coverage && tsx --env-file .env check-coverage",
     "migrate:dev": "px prisma migrate dev",
     "migrate:test": "npx prisma migrate dev",
     "migrate:dev:reset": "px prisma migrate reset",
@@ -25,6 +25,7 @@
   "dependencies": {
     "@fastify/cors": "9.0.1",
     "@prisma/client": "5.15.0",
+    "bcrypt": "5.1.1",
     "fastify": "4.27.0",
     "ioredis": "5.4.1",
     "tsx": "4.15.4",
@@ -33,6 +34,7 @@
   "devDependencies": {
     "@rocketseat/eslint-config": "2.2.2",
     "@total-typescript/ts-reset": "0.5.1",
+    "@types/bcrypt": "5.0.2",
     "@types/supertest": "6.0.2",
     "@vitest/coverage-v8": "1.6.0",
     "eslint": "8.57.0",

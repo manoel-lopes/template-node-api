@@ -1,7 +1,10 @@
 import fs from 'node:fs'
 import { createCoverageMap } from 'istanbul-lib-coverage'
 
-const COVERAGE_PERCENTAGE = Number(process.env.COVERAGE_PERCENTAGE) || 100
+const COVERAGE_PERCENTAGE =
+  process.env.COVERAGE_PERCENTAGE !== undefined
+    ? Number(process.env.COVERAGE_PERCENTAGE)
+    : 100
 const content = fs.readFileSync('./coverage/coverage-final.json', 'utf-8')
 const coverageMap = createCoverageMap(JSON.parse(content))
 const allFilesCoverage = coverageMap.getCoverageSummary()
