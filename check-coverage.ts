@@ -18,7 +18,7 @@ const totalCoverage =
 
 if (totalCoverage < COVERAGE_PERCENTAGE) {
   console.error(
-    `\n\x1b[1m\x1b[31mX Coverage is below ${COVERAGE_PERCENTAGE} (${totalCoverage.toFixed(
+    `\n\x1b[1m\x1b[31mX Coverage is below ${COVERAGE_PERCENTAGE}% (${totalCoverage.toFixed(
       2,
     )}%). Aborting push.\x1b[0m\n`,
   )
