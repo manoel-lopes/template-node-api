@@ -11,7 +11,7 @@ export default [
   {
     rules: {
       'no-useless-constructor': 'off',
-      'no-var': "error",
+      'no-var': 'error',
       '@stylistic/max-len': ['warn', {
         code: 80,
         tabWidth: 2,
@@ -27,12 +27,12 @@ export default [
       ],
       '@stylistic/comma-dangle': ['error', 'always-multiline'],
       '@stylistic/multiline-ternary': ['error', 'always'],
-      "@typescript-eslint/no-explicit-any": "error",
-      "@typescript-eslint/parameter-properties": [
-        "error",
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/parameter-properties': [
+        'error',
         {
-          "allow": ["readonly", "private readonly"]
-        }
+          allow: ['readonly', 'private readonly'],
+        },
       ],
     },
   },

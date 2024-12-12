@@ -12,7 +12,9 @@ export abstract class SchemaParser {
       if (!isObjectParamError) {
         const field = path[0]
         throw new SchemaParseFailedError(
-          `Field '${field}' ${errorMessage === 'required' ? 'is ' + errorMessage : errorMessage}`,
+          `Field '${field}' ${errorMessage === 'required'
+? 'is ' + errorMessage
+: errorMessage}`,
         )
       }
 

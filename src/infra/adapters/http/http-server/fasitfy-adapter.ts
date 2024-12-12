@@ -18,7 +18,9 @@ export class FastifyAdapter implements HttpServer {
 
   constructor() {
     this.app = Fastify(
-      env.NODE_ENV === 'development' ? { logger: true } : { logger: false },
+      env.NODE_ENV === 'development'
+        ? { logger: true }
+        : { logger: false },
     )
     this.app.register(cors)
     Object.freeze(this)
