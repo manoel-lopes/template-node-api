@@ -9,7 +9,6 @@
     "build": "tsup",
     "lint": "eslint --ext .ts src --fix",
     "lint:staged": "lint-staged",
-    "prepare": "husky || true && cross-env-shell chmod ug+x .husky/*",
     "test:dir": "vitest --run --silent --reporter verbose --dir",
     "test:unit": "vitest --run --passWithNoTests --silent --reporter verbose",
     "test:e2e": "vitest --run --silent --reporter verbose --dir src/main/routes",
@@ -23,26 +22,26 @@
     "db:up": "docker-compose up --build -d"
   },
   "dependencies": {
-    "@fastify/cors": "9.0.1",
-    "@prisma/client": "5.15.0",
-    "fastify": "4.27.0",
+    "@fastify/cors": "10.0.1",
+    "@prisma/client": "6.0.1",
+    "fastify": "5.1.0",
     "ioredis": "5.4.1",
-    "tsx": "4.15.4",
-    "zod": "3.23.8"
+    "tsx": "4.19.2",
+    "zod": "3.24.1"
   },
   "devDependencies": {
     "@rocketseat/eslint-config": "2.2.2",
-    "@total-typescript/ts-reset": "0.5.1",
+    "@total-typescript/ts-reset": "0.6.1",
     "@types/supertest": "6.0.2",
-    "@vitest/coverage-v8": "1.6.0",
-    "eslint": "8.57.0",
-    "husky": "9.0.11",
-    "lint-staged": "15.2.7",
-    "prisma": "5.15.0",
+    "@vitest/coverage-v8": "2.1.8",
+    "eslint": "9.16.0",
+    "husky": "9.1.7",
+    "lint-staged": "15.2.11",
+    "prisma": "6.0.1",
     "supertest": "7.0.0",
-    "tsup": "8.1.0",
-    "typescript": "5.1.6",
-    "vite": "5.2.13",
-    "vitest": "1.6.0"
+    "tsup": "8.3.5",
+    "typescript": "5.7.2",
+    "vite": "6.0.3",
+    "vitest": "2.1.8"
   }
 }
