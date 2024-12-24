@@ -1,6 +1,7 @@
 import eslint from '@eslint/js'
 import tseslint from 'typescript-eslint'
 import neostandard, { resolveIgnoresFromGitignore } from 'neostandard'
+import vitest from '@vitest/eslint-plugin'
 
 export default [
   eslint.configs.recommended,
@@ -9,6 +10,14 @@ export default [
     ignores: resolveIgnoresFromGitignore(),
   }),
   {
+    plugins: {
+      vitest,
+    },
+    languageOptions: {
+      globals: {
+        ...vitest.environments.env.globals,
+      },
+    },
     rules: {
       'no-useless-constructor': 'off',
       'no-var': 'error',
@@ -31,7 +40,7 @@ export default [
       '@typescript-eslint/parameter-properties': [
         'error',
         {
-          allow: ['readonly', 'private readonly'],
+          allow: ['readonly', 'private', 'private readonly'],
         },
       ],
     },
