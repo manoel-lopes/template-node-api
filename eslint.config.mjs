@@ -22,7 +22,7 @@ export default [
       'no-useless-constructor': 'off',
       'no-var': 'error',
       '@stylistic/max-len': ['warn', {
-        code: 80,
+        code: 98,
         tabWidth: 2,
         ignoreUrls: true,
         ignoreComments: false,
