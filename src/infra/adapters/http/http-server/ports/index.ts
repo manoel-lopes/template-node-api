@@ -1,7 +1,8 @@
-import type { HttpMethod } from '@/infra/adapters/http/ports'
-import type { RouteHandler } from '@/infra/api/ports'
+import type { Middleware, RouteHandler, ListenOptions } from '@/infra/api/ports'
 
 export type HttpServer = {
-  route(method: HttpMethod, url: string, handler: RouteHandler): void
-  listen: (port: number) => Promise<void>
+  use(middleware: Middleware): void
+  get(url: string, handler: RouteHandler): void
+  post(url: string, handler: RouteHandler): void
+  listen: (options: ListenOptions) => Promise<void>
 }
