@@ -47,6 +47,18 @@ export class FastifyAdapter implements HttpServer {
     this.registerRoute('POST', url, handler)
   }
 
+  put(url: string, handler: RouteHandler) {
+    this.registerRoute('PUT', url, handler)
+  }
+
+  patch(url: string, handler: RouteHandler) {
+    this.registerRoute('PATCH', url, handler)
+  }
+
+  delete(url: string, handler: RouteHandler) {
+    this.registerRoute('DELETE', url, handler)
+  }
+
   setErrorHandler(errorHandler: ErrorHandler) {
     this.app.setErrorHandler((error, req, reply) => {
       const res = this.createApiResponse(reply)
