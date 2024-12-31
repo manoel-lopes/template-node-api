@@ -1,8 +1,7 @@
 import { FastifyAdapter } from '@/infra/adapters/http/http-server/fasitfy-adapter'
 import { SchemaParseFailedError } from '@/infra/adapters/validation/errors'
-
-import { setRoutes } from './routes'
 import { env } from '@/lib/env'
+import { setRoutes } from './routes'
 
 const app = new FastifyAdapter()
 setRoutes(app)
