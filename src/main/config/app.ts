@@ -1,4 +1,4 @@
-import { FastifyAdapter } from '@/infra/adapters/http/http-server/fasitfy-adapter'
+import { FastifyAdapter } from '@/infra/adapters/http/http-server/fasitfy.adapter'
 import { SchemaParseFailedError } from '@/infra/adapters/validation/errors'
 import { env } from '@/lib/env'
 import { setRoutes } from './routes'
@@ -7,6 +7,11 @@ const app = new FastifyAdapter()
 setRoutes(app)
 app.setErrorHandler((error, _, res) => {
   if (error instanceof SchemaParseFailedError) {
+    const isRequiredError = error.message.includes('required')
+    if (isRequiredError) {
+      return res.status(404).json({ error: error.message })
+    }
+
     return res.status(400).json({ error: error.message })
   }
 
