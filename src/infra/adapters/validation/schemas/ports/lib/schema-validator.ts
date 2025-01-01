@@ -1,3 +1,4 @@
-export type SchemaValidator<T> = {
+export type SchemaValidator<T=unknown> = {
   validate: (data: unknown) => T
 }
+
