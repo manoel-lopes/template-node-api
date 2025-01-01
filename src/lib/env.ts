@@ -7,7 +7,7 @@ const _env = z
       .default('development'),
     PORT: z
       .string()
-      .default('3000')
+      .default('3333')
       .transform((port) => Number(port)),
     DB_USER: z.string(),
     DB_PASSWORD: z.string(),
