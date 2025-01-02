@@ -12,11 +12,3 @@ export type HttpResponse = {
   statusCode: HttpStatusCode
   body?: unknown
 }
-
-export type ApiRequest = HttpRequest
-
-export type ApiResponse = {
-  status(code: HttpStatusCode): { json(body?: unknown): unknown }
-  send?(data: unknown): unknown
-  data?: unknown
-}
