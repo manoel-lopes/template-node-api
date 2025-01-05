@@ -1,5 +1,8 @@
 import { z } from 'zod'
-import { SchemaParseFailedError } from '@/infra/adapters/validation/errors'
+import { 
+  SchemaParseFailedError
+ } from '@/infra/adapters/validation/errors/schema-parse-failed-error'
+
 export abstract class SchemaParser {
   static parse<T>(schema: z.Schema, data: unknown): T {
     const parsedSchema = schema.safeParse(data)
