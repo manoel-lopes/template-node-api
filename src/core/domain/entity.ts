@@ -1,10 +1,6 @@
-import { UniqueID } from '@/core/domain/unique-id'
+import { uuidv7 } from 'uuidv7'
 
 export abstract class Entity {
-  readonly id: string
-
-  protected constructor() {
-    const uniqueID = new UniqueID()
-    this.id = uniqueID.value
-  }
+  readonly id: string = uuidv7()
 }
+
