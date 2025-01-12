@@ -13,7 +13,7 @@ import {
 } from 'fastify-type-provider-zod'
 import { fastifySwagger } from '@fastify/swagger'
 import { fastifySwaggerUi } from '@fastify/swagger-ui'
-import type { HttpServer } from '@/infra/adapters/http/http-server/ports'
+import type { HttpServer } from '@/infra/adapters/http/ports/http-server'
 import type {
   Middleware,
   RouteOptions,
@@ -23,7 +23,7 @@ import type {
 import type {
   HttpMethod,
   HttpStatusCode,
-} from '@/infra/adapters/http/ports'
+} from '@/infra/http/ports'
 import { env } from '@/lib/env'
 
 export class FastifyAdapter implements HttpServer {

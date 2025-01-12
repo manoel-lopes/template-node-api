@@ -1,4 +1,4 @@
-import type { HttpRequest, HttpStatusCode } from '@/infra/adapters/http/ports'
+import type { HttpRequest, HttpStatusCode } from '@/infra/http/ports'
 
 export type ApiRequest = HttpRequest
 
