@@ -11,10 +11,8 @@ setRoutes(app)
 app.setErrorHandler((error, _, res) => {
   if (error instanceof SchemaParseFailedError) {
     const isRequiredError = error.message.includes('required')
-    const { statusCode, body } = isRequiredError
-      ? badRequest(error)
-      : unprocessable(error)
-    return res.status(statusCode).json(body)
+    const httpError = isRequiredError ? badRequest(error) : unprocessable(error)
+    return res.status(httpError.statusCode).json(httpError.body)
   }
 
   if (env.NODE_ENV !== 'production') {
@@ -26,4 +24,3 @@ app.setErrorHandler((error, _, res) => {
   return res.status(500).json({ error: 'Internal server error' })
 })
 export { app }
-

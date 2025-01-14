@@ -36,7 +36,7 @@ export default [
         },
       ],
       '@stylistic/comma-dangle': ['error', 'always-multiline'],
-      '@stylistic/multiline-ternary': ['error', 'always'],
+      '@stylistic/multiline-ternary': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': ['error', {
         argsIgnorePattern: '^_',

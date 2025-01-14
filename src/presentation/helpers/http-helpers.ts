@@ -7,31 +7,31 @@ export const ok = (data: unknown): HttpResponse => ({
   body: data,
 })
 
-const error = (err: Error, statusCode: HttpStatusCode): HttpResponse => ({
+const httpError = (err: Error, statusCode: HttpStatusCode): HttpResponse => ({
   statusCode,
   body: { error: { message: err.message } },
 })
 
 export const badRequest = (err: Error): HttpResponse => {
-  return error(err, 400)
+  return httpError(err, 400)
 }
 
 export const unauthorized = (err: Error): HttpResponse => {
-  return error(err, 401)
+  return httpError(err, 401)
 }
 
 export const forbidden = (err: Error): HttpResponse => {
-  return error(err, 403)
+  return httpError(err, 403)
 }
 
 export const notFound = (err: Error): HttpResponse => {
-  return error(err, 404)
+  return httpError(err, 404)
 }
 
 export const conflict = (err: Error): HttpResponse => {
-  return error(err, 409)
+  return httpError(err, 409)
 }
 
 export const unprocessable = (err: Error): HttpResponse => {
-  return error(err, 422)
+  return httpError(err, 422)
 }
