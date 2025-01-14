@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import {
-  SchemaParseFailedError,
-} from '@/infra/adapters/validation/errors/schema-parse-failed-error'
+  SchemaValidationError,
+} from '@/infra/adapters/validation/errors/schema-validation.error'
 
 export abstract class SchemaParser {
   static parse<T>(schema: z.Schema, data: unknown): T {
@@ -19,12 +19,12 @@ export abstract class SchemaParser {
     const isObjectParamError = path.length === 3
     if (!isObjectParamError) {
       const field = path[0]
-      return new SchemaParseFailedError(this.makeFieldErrorMessage(field, errorMessage),
+      return new SchemaValidationError(this.makeFieldErrorMessage(field, errorMessage),
       )
     }
 
     const [_, object, field] = path
-    return new SchemaParseFailedError(this.makeObjectFieldErrorMessage(
+    return new SchemaValidationError(this.makeObjectFieldErrorMessage(
       object,
       field,
       errorMessage,

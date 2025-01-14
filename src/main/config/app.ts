@@ -1,7 +1,7 @@
 import { FastifyAdapter } from '@/infra/adapters/http/http-server/fasitfy/fasitfy.adapter'
 import {
-  SchemaParseFailedError,
-} from '@/infra/adapters/validation/errors/schema-parse-failed.error'
+  SchemaValidationError,
+} from '@/infra/adapters/validation/errors/schema-validation.error'
 import { badRequest, unprocessable } from '@/presentation/helpers/http-helpers'
 import { env } from '@/lib/env'
 import { setRoutes } from './routes'
@@ -9,7 +9,7 @@ import { setRoutes } from './routes'
 const app = new FastifyAdapter()
 setRoutes(app)
 app.setErrorHandler((error, _, res) => {
-  if (error instanceof SchemaParseFailedError) {
+  if (error instanceof SchemaValidationError) {
     const isRequiredError = error.message.includes('required')
     const httpError = isRequiredError ? badRequest(error) : unprocessable(error)
     return res.status(httpError.statusCode).json(httpError.body)
