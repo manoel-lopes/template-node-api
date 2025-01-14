@@ -2,8 +2,8 @@ import { FastifyAdapter } from '@/infra/adapters/http/http-server/fasitfy/fasitf
 import {
   SchemaParseFailedError,
 } from '@/infra/adapters/validation/errors/schema-parse-failed.error'
-import { env } from '@/lib/env'
 import { badRequest, unprocessable } from '@/presentation/helpers/http-helpers'
+import { env } from '@/lib/env'
 import { setRoutes } from './routes'
 
 const app = new FastifyAdapter()
