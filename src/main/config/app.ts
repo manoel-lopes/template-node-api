@@ -1,6 +1,9 @@
 import { FastifyAdapter } from '@/infra/adapters/http/http-server/fasitfy/fasitfy.adapter'
-import { SchemaParseFailedError } from '@/infra/adapters/validation/errors'
+import {
+  SchemaParseFailedError,
+} from '@/infra/adapters/validation/errors/schema-parse-failed.error'
 import { env } from '@/lib/env'
+import { badRequest, unprocessable } from '@/presentation/helpers/http-helpers'
 import { setRoutes } from './routes'
 
 const app = new FastifyAdapter()
@@ -8,11 +11,10 @@ setRoutes(app)
 app.setErrorHandler((error, _, res) => {
   if (error instanceof SchemaParseFailedError) {
     const isRequiredError = error.message.includes('required')
-    if (isRequiredError) {
-      return res.status(400).json({ error: error.message })
-    }
-
-    return res.status(422).json({ error: error.message })
+    const { statusCode, body } = isRequiredError
+      ? badRequest(error)
+      : unprocessable(error)
+    return res.status(statusCode).json(body)
   }
 
   if (env.NODE_ENV !== 'production') {
@@ -24,3 +26,4 @@ app.setErrorHandler((error, _, res) => {
   return res.status(500).json({ error: 'Internal server error' })
 })
 export { app }
+
