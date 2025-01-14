@@ -1,4 +1,4 @@
-import type { HttpResponse } from '@/infra/adapters/http/ports'
+import type { HttpResponse, HttpStatusCode } from '@/infra/http/ports'
 
 export const created = (): HttpResponse => ({ statusCode: 201 })
 
@@ -7,22 +7,31 @@ export const ok = (data: unknown): HttpResponse => ({
   body: data,
 })
 
-export const badRequest = ({ message }: Error): HttpResponse => ({
-  statusCode: 400,
-  body: { error: { message } },
+const error = (err: Error, statusCode: HttpStatusCode): HttpResponse => ({
+  statusCode,
+  body: { error: { message: err.message } },
 })
 
-export const forbidden = ({ message }: Error): HttpResponse => ({
-  statusCode: 403,
-  body: { error: { message } },
-})
+export const badRequest = (err: Error): HttpResponse => {
+  return error(err, 400)
+}
 
-export const notFound = ({ message }: Error): HttpResponse => ({
-  statusCode: 404,
-  body: { error: { message } },
-})
+export const unauthorized = (err: Error): HttpResponse => {
+  return error(err, 401)
+}
 
-export const conflict = ({ message }: Error): HttpResponse => ({
-  statusCode: 409,
-  body: { error: { message } },
-})
+export const forbidden = (err: Error): HttpResponse => {
+  return error(err, 403)
+}
+
+export const notFound = (err: Error): HttpResponse => {
+  return error(err, 404)
+}
+
+export const conflict = (err: Error): HttpResponse => {
+  return error(err, 409)
+}
+
+export const unprocessable = (err: Error): HttpResponse => {
+  return error(err, 422)
+}
