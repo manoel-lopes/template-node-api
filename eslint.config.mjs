@@ -22,6 +22,7 @@ export default [
       'no-useless-constructor': 'off',
       'no-var': 'error',
       'no-unused-vars': 'off',
+      'no-console': ['error', { allow: ['error'] }],
       '@stylistic/max-len': ['warn', {
         code: 98,
         tabWidth: 2,
