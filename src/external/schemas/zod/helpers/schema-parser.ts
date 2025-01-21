@@ -8,7 +8,7 @@ export abstract class SchemaParser {
     const parsedSchema = schema.safeParse(data)
     const { error } = parsedSchema
     if (error) {
-      throw new SchemaValidationError(this.formatPluralString(
+      throw new SchemaValidationError(this.formatValidationErrorMessage(
         this.makeSchemaValidationErrorMessage(error.errors[0]),
       ))
     }
@@ -28,8 +28,8 @@ export abstract class SchemaParser {
     return `${object} ${field} ${msg}`
   }
 
-  private static formatPluralString(str: string) {
-    return str.replace(/(\d+)\scharacter\(s\)/g, (_, num) => {
+  private static formatValidationErrorMessage(message: string) {
+    return message.replace(/(\d+)\scharacter\(s\)/g, (_, num) => {
       return `${num} character${num > 1 ? 's' : ''}`
     })
   }
