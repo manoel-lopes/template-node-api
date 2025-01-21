@@ -3,17 +3,6 @@ import {
   SchemaValidationError,
 } from '@/infra/adapters/validation/errors/schema-validation.error'
 
-type FieldError = {
-  field: string | number,
-  message: string
-}
-
-type ObjectFieldError = {
-  object: string | number,
-  field: string | number,
-  message: string
-}
-
 export abstract class SchemaParser {
   static parse<T>(schema: z.Schema, data: unknown): T {
     const parsedSchema = schema.safeParse(data)
@@ -32,22 +21,11 @@ export abstract class SchemaParser {
     const isObjectFieldError = path.length === 3
     if (!isObjectFieldError) {
       const field = path[0]
-      return this.makeFieldErrorMessage({ field, message: msg })
+      return `Field '${field}' ${msg === 'required' ? `is ${msg}` : msg}`
     }
 
     const [_, object, field] = path
-    return this.makeObjectFieldErrorMessage({ object, field, message: msg })
-  }
-
-  private static makeFieldErrorMessage(error: FieldError) {
-    const { field, message } = error
-    const msg = message === 'required' ? `is ${message}` : message
-    return `Field '${field}' ${msg}`
-  }
-
-  private static makeObjectFieldErrorMessage(error: ObjectFieldError) {
-    const { object, field, message } = error
-    return `${object} ${field} ${message}`
+    return `${object} ${field} ${msg}`
   }
 
   private static formatPluralString(str: string) {
