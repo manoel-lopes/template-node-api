@@ -5,13 +5,13 @@ import {
 
 type FieldError = {
   field: string | number,
-  errorMessage: string
+  message: string
 }
 
 type ObjectFieldError = {
   object: string | number,
   field: string | number,
-  errorMessage: string
+  message: string
 }
 
 export abstract class SchemaParser {
@@ -19,45 +19,35 @@ export abstract class SchemaParser {
     const parsedSchema = schema.safeParse(data)
     const { error } = parsedSchema
     if (error) {
-      throw this.createSchemaParseError(error.errors[0])
+      throw new SchemaValidationError(this.formatPluralString(
+        this.makeSchemaValidationErrorMessage(error.errors[0]),
+      ))
     }
     return parsedSchema.data
   }
 
-  private static createSchemaParseError(errorDetail: z.ZodIssue) {
-    const { path, message } = errorDetail
-    const errorMessage = message.toLowerCase()
+  private static makeSchemaValidationErrorMessage(issues: z.ZodIssue) {
+    const { path, message } = issues
+    const msg = message.toLowerCase()
     const isObjectFieldError = path.length === 3
     if (!isObjectFieldError) {
       const field = path[0]
-      return new SchemaValidationError(this.formatPluralString(
-        this.makeFieldErrorMessage({
-          field,
-          errorMessage,
-        }),
-      ))
+      return this.makeFieldErrorMessage({ field, message: msg })
     }
 
     const [_, object, field] = path
-    return new SchemaValidationError(this.formatPluralString(
-      this.makeObjectFieldErrorMessage({
-        object,
-        field,
-        errorMessage,
-      }),
-    ))
+    return this.makeObjectFieldErrorMessage({ object, field, message: msg })
   }
 
-  private static makeFieldErrorMessage(fieldError: FieldError) {
-    const { field, errorMessage } = fieldError
-    return `Field '${field}' ${errorMessage === 'required'
-            ? 'is ' + errorMessage
-            : errorMessage}`
+  private static makeFieldErrorMessage(error: FieldError) {
+    const { field, message } = error
+    const msg = message === 'required' ? `is ${message}` : message
+    return `Field '${field}' ${msg}`
   }
 
-  private static makeObjectFieldErrorMessage(objFieldError: ObjectFieldError) {
-    const { object, field, errorMessage } = objFieldError
-    return `${object} ${field} ${errorMessage}`
+  private static makeObjectFieldErrorMessage(error: ObjectFieldError) {
+    const { object, field, message } = error
+    return `${object} ${field} ${message}`
   }
 
   private static formatPluralString(str: string) {
