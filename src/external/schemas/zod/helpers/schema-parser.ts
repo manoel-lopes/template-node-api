@@ -1,9 +1,11 @@
 import { z } from 'zod'
-import type { SchemaResult } from '@/infra/adapters/validation/schemas/ports/schema-validator'
+import type {
+  SchemaParseResult,
+} from '@/infra/adapters/validation/schemas/ports/schema-validator'
 import { SchemaValidationError } from '@/infra/adapters/validation/errors/schema-validation.error'
 
 export abstract class SchemaParser {
-  static parse<T = SchemaResult>(schema: z.Schema, data: unknown): T {
+  static parse<T = SchemaParseResult>(schema: z.Schema, data: unknown): T {
     const parsedSchema = schema.safeParse(data)
     if (!parsedSchema.success) {
       const errorMessage = this.formatValidationErrorMessage(
