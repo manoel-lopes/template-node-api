@@ -16,7 +16,7 @@ app.setErrorHandler((error, _, res) => {
   }
 
   if (env.NODE_ENV !== 'production') {
-    console.error(error)
+    console.error({ errors: error.message })
   } else {
     // TODO: It should log to an external observability tool like DataDog/NewRelic/Sentry
   }
