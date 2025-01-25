@@ -1,4 +1,5 @@
 import type { HttpResponse, HttpStatusCode } from '@/infra/http/ports'
+import { HttpError } from './errors/http.error'
 
 export const created = (): HttpResponse => ({ statusCode: 201 })
 
@@ -7,31 +8,41 @@ export const ok = (data: unknown): HttpResponse => ({
   body: data,
 })
 
-const httpError = (err: Error, statusCode: HttpStatusCode): HttpResponse => ({
+const httpError = (err: HttpError, statusCode: HttpStatusCode): HttpResponse => ({
   statusCode,
-  body: { error: { message: err.message } },
+  body: {
+    statusCode,
+    error: err.name,
+    message: err.message,
+  },
 })
 
 export const badRequest = (err: Error): HttpResponse => {
-  return httpError(err, 400)
+  const error = new HttpError('Bad Request', err.message)
+  return httpError(error, 400)
 }
 
 export const unauthorized = (err: Error): HttpResponse => {
-  return httpError(err, 401)
+  const error = new HttpError('Unauthorized', err.message)
+  return httpError(error, 401)
 }
 
 export const forbidden = (err: Error): HttpResponse => {
-  return httpError(err, 403)
+  const error = new HttpError('Forbidden', err.message)
+  return httpError(error, 403)
 }
 
 export const notFound = (err: Error): HttpResponse => {
-  return httpError(err, 404)
+  const error = new HttpError('Not Found', err.message)
+  return httpError(error, 404)
 }
 
 export const conflict = (err: Error): HttpResponse => {
-  return httpError(err, 409)
+  const error = new HttpError('Conflict', err.message)
+  return httpError(error, 409)
 }
 
 export const unprocessable = (err: Error): HttpResponse => {
-  return httpError(err, 422)
+  const error = new HttpError('Unprocessable Entity', err.message)
+  return httpError(error, 422)
 }

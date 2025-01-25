@@ -11,7 +11,7 @@ setRoutes(app)
 app.setErrorHandler((error, _, res) => {
   if (error instanceof SchemaValidationError) {
     const isRequiredError = error.message.includes('required')
-    const httpError = isRequiredError ? badRequ0est(error) : unprocessable(error)
+    const httpError = isRequiredError ? badRequest(error) : unprocessable(error)
     return res.status(httpError.statusCode).json(httpError.body)
   }
 
@@ -21,6 +21,9 @@ app.setErrorHandler((error, _, res) => {
     // TODO: It should log to an external observability tool like DataDog/NewRelic/Sentry
   }
 
-  return res.status(500).json({ error: 'Internal server error' })
+  return res.status(500).json({
+    statusCode: 500,
+    error: 'Internal Server Error',
+  })
 })
 export { app }
