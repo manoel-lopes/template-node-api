@@ -8,7 +8,6 @@ import cors from '@fastify/cors'
 import {
   jsonSchemaTransform,
   serializerCompiler,
-  validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 import { fastifySwagger } from '@fastify/swagger'
@@ -44,7 +43,7 @@ export class FastifyAdapter implements HttpServer {
 
   private registerPlugins() {
     this.app.register(cors)
-    this.app.setValidatorCompiler(validatorCompiler)
+    this.app.setValidatorCompiler(() => { return (value) => ({ value }) })
     this.app.setSerializerCompiler(serializerCompiler)
     this.app.register(fastifySwagger, {
       openapi: {
