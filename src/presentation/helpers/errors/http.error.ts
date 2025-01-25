@@ -1,4 +1,4 @@
-type HppErrorType =
+type HttpErrorType =
 'Bad Request'
 | 'Unauthorized'
 | 'Forbidden'
@@ -7,7 +7,7 @@ type HppErrorType =
 | 'Unprocessable Entity'
 
 export class HttpError extends Error {
-  constructor(name: HppErrorType, message: string) {
+  constructor(name: HttpErrorType, message: string) {
     super(message)
     this.name = name
   }
