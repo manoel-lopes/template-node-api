@@ -22,7 +22,6 @@ app.setErrorHandler((error, _, res) => {
   }
 
   return res.status(500).json({
-    statusCode: 500,
     error: 'Internal Server Error',
   })
 })
