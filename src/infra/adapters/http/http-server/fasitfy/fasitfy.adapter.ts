@@ -22,7 +22,7 @@ import type {
 import type {
   HttpMethod,
   HttpStatusCode,
-} from '@/infra/http/ports'
+} from '@/infra/http/ports/http-protocol'
 import { env } from '@/lib/env'
 
 export class FastifyAdapter implements HttpServer {

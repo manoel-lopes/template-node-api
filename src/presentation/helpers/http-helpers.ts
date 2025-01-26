@@ -1,4 +1,4 @@
-import type { HttpResponse, HttpStatusCode } from '@/infra/http/ports'
+import type { HttpResponse, HttpStatusCode } from '@/infra/http/ports/http-protocol'
 import { HttpError, type HttpErrorType } from './errors/http.error'
 
 export const created = (): HttpResponse => ({ statusCode: 201 })
