@@ -1,9 +1,36 @@
-import type {
-  Middleware,
-  RouteOptions,
-  ListenOptions,
-  ErrorHandler,
-} from '@/infra/api/ports'
+import type { HttpRequest, HttpStatusCode } from '@/infra/http/ports/http-protocol'
+
+export type ApiRequest = HttpRequest
+
+export type ApiResponse = {
+  status(code: HttpStatusCode): { json(body?: unknown): unknown }
+  send?(data: unknown): unknown
+  data?: unknown
+}
+
+export type SchemaOptions = {
+  tags?: string[]
+  description?: string
+  body?: unknown
+  params?: unknown
+  query?: unknown
+  headers?: unknown
+  response?: Record<number, unknown>
+}
+
+export type RouteOptions = {
+  schema?: SchemaOptions
+}
+
+export type Middleware = (
+  req: ApiRequest,
+  res: ApiResponse,
+  next?: () => void
+) => Promise<unknown> | void
+
+export type ListenOptions = { port: number, host: string }
+
+export type ErrorHandler = (error: Error, req: ApiRequest, res: ApiResponse) => void
 
 export type HttpServer = {
   get(url: string, options: RouteOptions, ...handlers: Middleware[]): void
@@ -16,4 +43,3 @@ export type HttpServer = {
   setErrorHandler(errorHandler: ErrorHandler): void
   use(middleware: Middleware): void
 }
-

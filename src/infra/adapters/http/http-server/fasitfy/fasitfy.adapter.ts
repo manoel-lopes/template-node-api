@@ -12,13 +12,13 @@ import {
 } from 'fastify-type-provider-zod'
 import { fastifySwagger } from '@fastify/swagger'
 import { fastifySwaggerUi } from '@fastify/swagger-ui'
-import type { HttpServer } from '@/infra/adapters/http/ports/http-server'
 import type {
+  HttpServer,
   Middleware,
   RouteOptions,
   ListenOptions,
   ErrorHandler,
-} from '@/infra/api/ports'
+} from '@/infra/adapters/http/ports/http-server'
 import type {
   HttpMethod,
   HttpStatusCode,
