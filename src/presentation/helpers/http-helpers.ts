@@ -1,5 +1,5 @@
 import type { HttpResponse, HttpStatusCode } from '@/infra/http/ports'
-import { HttpError } from './errors/http.error'
+import { HttpError, type HttpErrorType } from './errors/http.error'
 
 export const created = (): HttpResponse => ({ statusCode: 201 })
 
@@ -8,41 +8,44 @@ export const ok = (data: unknown): HttpResponse => ({
   body: data,
 })
 
-const httpError = (err: HttpError, statusCode: HttpStatusCode): HttpResponse => ({
-  statusCode,
-  body: {
-    statusCode,
-    error: err.name,
-    message: err.message,
-  },
-})
+const httpError = (err: HttpError): HttpResponse => {
+  const statusCodeMapper:Record<HttpErrorType, HttpStatusCode> = {
+    'Bad Request': 400,
+    Unauthorized: 401,
+    Forbidden: 403,
+    'Not Found': 404,
+    Conflict: 409,
+    'Unprocessable Entity': 422,
+  }
+  return {
+    statusCode: statusCodeMapper[err.name],
+    body: {
+      error: err.name,
+      message: err.message,
+    },
+  }
+}
 
 export const badRequest = (err: Error): HttpResponse => {
-  const error = new HttpError('Bad Request', err.message)
-  return httpError(error, 400)
+  return httpError({ name: 'Bad Request', message: err.message })
 }
 
 export const unauthorized = (err: Error): HttpResponse => {
-  const error = new HttpError('Unauthorized', err.message)
-  return httpError(error, 401)
+  return httpError({ name: 'Unauthorized', message: err.message })
 }
 
 export const forbidden = (err: Error): HttpResponse => {
-  const error = new HttpError('Forbidden', err.message)
-  return httpError(error, 403)
+  return httpError({ name: 'Forbidden', message: err.message })
 }
 
 export const notFound = (err: Error): HttpResponse => {
-  const error = new HttpError('Not Found', err.message)
-  return httpError(error, 404)
+  return httpError({ name: 'Not Found', message: err.message })
 }
 
 export const conflict = (err: Error): HttpResponse => {
-  const error = new HttpError('Conflict', err.message)
-  return httpError(error, 409)
+  return httpError({ name: 'Conflict', message: err.message })
 }
 
 export const unprocessable = (err: Error): HttpResponse => {
-  const error = new HttpError('Unprocessable Entity', err.message)
-  return httpError(error, 422)
+  return httpError({ name: 'Bad Request', message: err.message })
 }
