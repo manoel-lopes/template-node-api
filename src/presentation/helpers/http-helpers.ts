@@ -8,24 +8,6 @@ export const ok = (data: unknown): HttpResponse => ({
   body: data,
 })
 
-const httpError = (err: HttpError): HttpResponse => {
-  const statusCodeMapper:Record<HttpErrorType, HttpStatusCode> = {
-    'Bad Request': 400,
-    Unauthorized: 401,
-    Forbidden: 403,
-    'Not Found': 404,
-    Conflict: 409,
-    'Unprocessable Entity': 422,
-  }
-  return {
-    statusCode: statusCodeMapper[err.name],
-    body: {
-      error: err.name,
-      message: err.message,
-    },
-  }
-}
-
 export const badRequest = (err: Error): HttpResponse => {
   return httpError({ name: 'Bad Request', message: err.message })
 }
@@ -47,5 +29,23 @@ export const conflict = (err: Error): HttpResponse => {
 }
 
 export const unprocessable = (err: Error): HttpResponse => {
-  return httpError({ name: 'Unprocessable Entity', message: err.message })
+  return httpError({ name: 'Bad Request', message: err.message })
+}
+
+const httpError = (err: HttpError): HttpResponse => {
+  const statusCodeMapper:Record<HttpErrorType, HttpStatusCode> = {
+    'Bad Request': 400,
+    Unauthorized: 401,
+    Forbidden: 403,
+    'Not Found': 404,
+    Conflict: 409,
+    'Unprocessable Entity': 422,
+  }
+  return {
+    statusCode: statusCodeMapper[err.name],
+    body: {
+      error: err.name,
+      message: err.message,
+    },
+  }
 }
