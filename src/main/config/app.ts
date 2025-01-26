@@ -21,8 +21,6 @@ app.setErrorHandler((error, _, res) => {
     // TODO: It should log to an external observability tool like DataDog/NewRelic/Sentry
   }
 
-  return res.status(500).json({
-    error: 'Internal Server Error',
-  })
+  return res.status(500).json({ error: 'Internal Server Error' })
 })
 export { app }
