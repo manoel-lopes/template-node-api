@@ -29,7 +29,7 @@ export const conflict = (err: Error): HttpResponse => {
 }
 
 export const unprocessable = (err: Error): HttpResponse => {
-  return httpError({ name: 'Bad Request', message: err.message })
+  return httpError({ name: 'Unprocessable Entity', message: err.message })
 }
 
 const httpError = (err: HttpError): HttpResponse => {
