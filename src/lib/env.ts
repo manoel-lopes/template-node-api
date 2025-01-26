@@ -16,7 +16,7 @@ const _env = z
     DB_USER: z.string(),
     DB_PASSWORD: z.string(),
     DB_HOST: z.string(),
-    DB_PORT: z.string(),
+    DB_PORT: z.string().transform((port) => Number(port)),
     DB_NAME: z.string(),
   })
   .safeParse(process.env)
