@@ -15,10 +15,8 @@
     "test:int": "vitest --run --passWithNoTests --no-threads --silent --reporter verbose --dir src/main/routes",
     "test:staged": "vitest related --run",
     "test:ci": "vitest --run --silent --coverage",
-    "migrate:dev": "px prisma migrate dev",
-    "migrate:test": "npx prisma migrate dev",
-    "migrate:dev:reset": "px prisma migrate reset",
-    "migrate:test:reset": "npx prisma migrate reset",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:reset": "prisma migrate reset",
     "db:up": "docker-compose up --build -d"
   },
   "dependencies": {
