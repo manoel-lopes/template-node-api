@@ -26,6 +26,7 @@
     "@fastify/swagger-ui": "5.2.0",
     "@prisma/client": "6.1.0",
     "@vitest/eslint-plugin": "1.1.24",
+    "dotenv-cli": "8.0.0",
     "fastify": "5.2.0",
     "fastify-type-provider-zod": "4.0.2",
     "ioredis": "5.4.2",
