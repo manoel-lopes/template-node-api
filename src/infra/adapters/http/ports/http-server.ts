@@ -9,7 +9,7 @@ export type ApiResponse = {
 }
 
 type HttpRequestSchema = HttpRequest
-type HttpResponseSchema = Partial<Record<HttpStatusCode, unknown>>
+export type HttpResponseSchema = Partial<Record<HttpStatusCode, unknown>>
 
 export type SchemaOptions = {
   tags?: string[]
