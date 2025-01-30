@@ -3,9 +3,7 @@ import type { HttpRequest, HttpStatusCode } from '@/infra/http/ports/http-protoc
 export type ApiRequest = HttpRequest
 
 export type ApiResponse = {
-  status(code: HttpStatusCode): { json(body?: unknown): unknown }
-  send?(data: unknown): unknown
-  data?: unknown
+  code(statusCode: HttpStatusCode): { send(body?: unknown): unknown }
 }
 
 type HttpRequestSchema = HttpRequest

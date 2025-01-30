@@ -4,6 +4,6 @@ import type { ApiRequest, ApiResponse } from '@/infra/adapters/http/ports/http-s
 export function adaptRoute(controller: WebController) {
   return async (req: ApiRequest, res: ApiResponse) => {
     const { statusCode, body } = await controller.handle(req)
-    res.status(statusCode).json(body)
+    res.code(statusCode).send(body)
   }
 }

@@ -18,11 +18,9 @@ import type {
   RouteOptions,
   ListenOptions,
   ErrorHandler,
-  ApiResponse,
 } from '@/infra/adapters/http/ports/http-server'
 import type {
   HttpMethod,
-  HttpStatusCode,
 } from '@/infra/http/ports/http-protocol'
 import { env } from '@/lib/env'
 
@@ -90,10 +88,7 @@ export class FastifyAdapter implements HttpServer {
   }
 
   setErrorHandler(errorHandler: ErrorHandler) {
-    this.app.setErrorHandler((error, req, reply) => {
-      const res = this.createApiResponse(reply)
-      errorHandler(error, req, res)
-    })
+    this.app.setErrorHandler(errorHandler)
   }
 
   async listen(options?: ListenOptions) {
@@ -130,19 +125,10 @@ export class FastifyAdapter implements HttpServer {
     if (index >= handlers.length) return
     try {
       const handler = handlers[index]
-      const res = this.createApiResponse(reply)
       const next = () => this.executeHandlers(req, reply, handlers, index + 1)
-      await handler(req, res, next)
+      await handler(req, reply, next)
     } catch (error) {
       this.app.log.error(error)
-    }
-  }
-
-  private createApiResponse(reply: FastifyReply): ApiResponse {
-    return {
-      status: (statusCode: HttpStatusCode) => ({
-        json: (body: unknown) => reply.code(statusCode).send(body),
-      }),
     }
   }
 }
