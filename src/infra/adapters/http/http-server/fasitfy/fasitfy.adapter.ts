@@ -1,15 +1,10 @@
 import Fastify from 'fastify'
-import type {
-  FastifyInstance,
-  FastifyRequest,
-  FastifyReply,
-} from 'fastify'
+import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import cors from '@fastify/cors'
 import {
   jsonSchemaTransform,
   serializerCompiler,
-  type ZodTypeProvider,
-} from 'fastify-type-provider-zod'
+  type ZodTypeProvider } from 'fastify-type-provider-zod'
 import { fastifySwagger } from '@fastify/swagger'
 import { fastifySwaggerUi } from '@fastify/swagger-ui'
 import type {
@@ -17,11 +12,8 @@ import type {
   Middleware,
   RouteOptions,
   ListenOptions,
-  ErrorHandler,
-} from '@/infra/adapters/http/ports/http-server'
-import type {
-  HttpMethod,
-} from '@/infra/http/ports/http-protocol'
+  ErrorHandler } from '@/infra/adapters/http/ports/http-server'
+import type { HttpMethod } from '@/infra/http/ports/http-protocol'
 import { env } from '@/lib/env'
 
 type ServerRoute = {
@@ -31,10 +23,15 @@ type ServerRoute = {
   handlers: Middleware[]
 }
 
+type RouteHandlersOptions = {
+  req: FastifyRequest,
+  reply: FastifyReply,
+  handlers: Middleware[]
+}
+
 export class FastifyAdapter implements HttpServer {
   private readonly app: FastifyInstance
   private readonly middlewares: Middleware[] = []
-
   constructor() {
     this.app = this.createAppInstance()
     this.registerPlugins()
@@ -49,13 +46,12 @@ export class FastifyAdapter implements HttpServer {
 
   private registerPlugins() {
     this.app.register(cors)
-    this.app.setValidatorCompiler(() => { return (value) => ({ value }) })
+    this.app.setValidatorCompiler(() => (value) => ({ value }))
     this.app.setSerializerCompiler(serializerCompiler)
     this.app.register(fastifySwagger, {
       openapi: {
         info: {
-          title: 'Clean Forum API',
-          version: '1.0.0',
+          title: 'Clean Forum API', version: '1.0.0',
         },
       },
       transform: jsonSchemaTransform,
@@ -92,43 +88,32 @@ export class FastifyAdapter implements HttpServer {
   }
 
   async listen(options?: ListenOptions) {
-    try {
-      this.app.listen({ port: env.PORT, host: '0.0.0.0', ...options })
-    } catch (error) {
-      this.app.log.error(error)
-      process.exit(1)
-    }
+    await this.app.listen({ port: env.PORT, host: '0.0.0.0', ...options })
   }
 
   async close() {
-    this.app.close()
+    await this.app.close()
   }
 
   private registerRoute(route: ServerRoute) {
     const { options, handlers } = route
     const schema = { ...options.schema, ...options.schema?.request }
     this.app.register((instance) => {
-      instance.route({ ...route, schema, handler: async (req, reply) => {
-        const allHandlers = [...this.middlewares, ...handlers]
-        await this.executeHandlers(req, reply, allHandlers)
-      },
-      })
+      instance.route({ ...route, schema, handler: (req, reply) => {
+        this.executeHandlers({ req, reply, handlers })
+      } })
     })
   }
 
-  private async executeHandlers(
-    req: FastifyRequest,
-    reply: FastifyReply,
-    handlers: Middleware[],
-    index = 0,
-  ): Promise<void> {
-    if (index >= handlers.length) return
+  private async executeHandlers(opts: RouteHandlersOptions) {
+    const { handlers, req, reply } = opts
     try {
-      const handler = handlers[index]
-      const next = () => this.executeHandlers(req, reply, handlers, index + 1)
-      await handler(req, reply, next)
+      for (const handler of [...this.middlewares, ...handlers]) {
+        await handler(req, reply)
+      }
     } catch (error) {
       this.app.log.error(error)
+      reply.send(error)
     }
   }
 }
