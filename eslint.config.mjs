@@ -24,11 +24,13 @@ export default [
       'no-unused-vars': 'off',
       'no-console': ['error', { allow: ['error'] }],
       '@stylistic/max-len': ['warn', {
-        code: 98,
+        code: 85,
         tabWidth: 2,
         ignoreUrls: true,
         ignoreComments: false,
       }],
+      '@stylistic/object-curly-newline': 'off',
+      '@stylistic/object-property-newline': 'off',
       '@stylistic/space-before-function-paren': ['error',
         {
           anonymous: 'always',
