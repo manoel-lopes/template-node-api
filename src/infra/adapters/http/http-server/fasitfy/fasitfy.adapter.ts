@@ -1,10 +1,10 @@
 import Fastify from 'fastify'
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
-import cors from '@fastify/cors'
 import {
   jsonSchemaTransform,
   serializerCompiler,
   type ZodTypeProvider } from 'fastify-type-provider-zod'
+import cors from '@fastify/cors'
 import { fastifySwagger } from '@fastify/swagger'
 import { fastifySwaggerUi } from '@fastify/swagger-ui'
 import type {
