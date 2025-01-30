@@ -8,14 +8,15 @@ export type ApiResponse = {
   data?: unknown
 }
 
+type HttpRequestSchema = HttpRequest
+type HttpResponseSchema = Partial<Record<HttpStatusCode, unknown>>
+
 export type SchemaOptions = {
   tags?: string[]
   description?: string
-  body?: unknown
-  params?: unknown
-  query?: unknown
   headers?: unknown
-  response?: Record<number, unknown>
+  request?: HttpRequestSchema
+  response?: HttpResponseSchema
 }
 
 export type RouteOptions = {

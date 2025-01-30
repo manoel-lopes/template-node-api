@@ -18,12 +18,20 @@ import type {
   RouteOptions,
   ListenOptions,
   ErrorHandler,
+  ApiResponse,
 } from '@/infra/adapters/http/ports/http-server'
 import type {
   HttpMethod,
   HttpStatusCode,
 } from '@/infra/http/ports/http-protocol'
 import { env } from '@/lib/env'
+
+type ServerRoute = {
+  method: HttpMethod
+  url: string
+  options: RouteOptions
+  handlers: Middleware[]
+}
 
 export class FastifyAdapter implements HttpServer {
   private readonly app: FastifyInstance
@@ -62,23 +70,23 @@ export class FastifyAdapter implements HttpServer {
   }
 
   get(url: string, options: RouteOptions, ...handlers: Middleware[]) {
-    this.registerRoute('GET', url, options, handlers)
+    this.registerRoute({ method: 'GET', url, options, handlers })
   }
 
   post(url: string, options: RouteOptions, ...handlers: Middleware[]) {
-    this.registerRoute('POST', url, options, handlers)
+    this.registerRoute({ method: 'POST', url, options, handlers })
   }
 
   put(url: string, options: RouteOptions, ...handlers: Middleware[]) {
-    this.registerRoute('PUT', url, options, handlers)
+    this.registerRoute({ method: 'PUT', url, options, handlers })
   }
 
   patch(url: string, options: RouteOptions, ...handlers: Middleware[]) {
-    this.registerRoute('PATCH', url, options, handlers)
+    this.registerRoute({ method: 'PATCH', url, options, handlers })
   }
 
   delete(url: string, options: RouteOptions, ...handlers: Middleware[]) {
-    this.registerRoute('DELETE', url, options, handlers)
+    this.registerRoute({ method: 'DELETE', url, options, handlers })
   }
 
   setErrorHandler(errorHandler: ErrorHandler) {
@@ -89,79 +97,52 @@ export class FastifyAdapter implements HttpServer {
   }
 
   async listen(options?: ListenOptions) {
-    await this.handlePromise(
-      this.app.listen({
-        port: env.PORT,
-        host: '0.0.0.0',
-        ...options,
-      }),
-    )
-  }
-
-  async close() {
-    await this.handlePromise(this.app.close())
-  }
-
-  private registerRoute(
-    method: HttpMethod,
-    url: string,
-    options: RouteOptions,
-    handlers: Middleware[],
-  ) {
-    this.app.register((instance) => {
-      instance.route({
-        method,
-        url,
-        schema: options.schema,
-        handler: (req, reply) => this.handleRequest(req, reply, handlers),
-      })
-    })
-  }
-
-  private async handleRequest(
-    req: FastifyRequest,
-    reply: FastifyReply,
-    handlers: Middleware[],
-  ) {
-    const res = this.createApiResponse(reply)
-    const allHandlers = [...this.middlewares, ...handlers]
-    let index = 0
-    const next = async () => {
-      if (index < allHandlers.length) {
-        const handler = allHandlers[index]
-        index++
-        const result = handler(req, res, next)
-        if (result instanceof Promise) {
-          await result
-        }
-      }
-    }
     try {
-      await next()
-    } catch (error) {
-      this.app.log.error(error)
-      reply.send(error)
-    }
-  }
-
-  private async handlePromise(promise: Promise<unknown>) {
-    try {
-      await promise
+      this.app.listen({ port: env.PORT, host: '0.0.0.0', ...options })
     } catch (error) {
       this.app.log.error(error)
       process.exit(1)
     }
   }
 
-  private createApiResponse(reply: FastifyReply) {
-    return {
-      status(statusCode: HttpStatusCode) {
-        return {
-          json(body: unknown) {
-            return reply.code(statusCode).send(body)
-          },
-        }
+  async close() {
+    this.app.close()
+  }
+
+  private registerRoute(route: ServerRoute) {
+    const { options, handlers } = route
+    const schema = { ...options.schema, ...options.schema?.request }
+    this.app.register((instance) => {
+      instance.route({ ...route, schema, handler: async (req, reply) => {
+        const allHandlers = [...this.middlewares, ...handlers]
+        await this.executeHandlers(req, reply, allHandlers)
       },
+      })
+    })
+  }
+
+  private async executeHandlers(
+    req: FastifyRequest,
+    reply: FastifyReply,
+    handlers: Middleware[],
+    index = 0,
+  ): Promise<void> {
+    if (index >= handlers.length) return
+    try {
+      const handler = handlers[index]
+      const res = this.createApiResponse(reply)
+      const next = () => this.executeHandlers(req, reply, handlers, index + 1)
+      await handler(req, res, next)
+    } catch (error) {
+      this.app.log.error(error)
+    }
+  }
+
+  private createApiResponse(reply: FastifyReply): ApiResponse {
+    return {
+      status: (statusCode: HttpStatusCode) => ({
+        json: (body: unknown) => reply.code(statusCode).send(body),
+      }),
     }
   }
 }
