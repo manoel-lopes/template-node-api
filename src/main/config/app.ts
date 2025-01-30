@@ -12,7 +12,7 @@ app.setErrorHandler((error, _, res) => {
   if (error instanceof SchemaValidationError) {
     const isRequiredError = error.message.includes('required')
     const httpError = isRequiredError ? badRequest(error) : unprocessable(error)
-    return res.status(httpError.statusCode).json(httpError.body)
+    return res.code(httpError.statusCode).send(httpError.body)
   }
 
   if (env.NODE_ENV !== 'production') {
@@ -21,6 +21,9 @@ app.setErrorHandler((error, _, res) => {
     // TODO: It should log to an external observability tool like DataDog/NewRelic/Sentry
   }
 
-  return res.status(500).json({ error: 'Internal Server Error' })
+  return res.code(500).send({
+    error: 'Internal Server Error',
+    message: 'The server encountered an unexpected condition preventing to fulfill the request',
+  })
 })
 export { app }
