@@ -4,7 +4,7 @@ import type {
 } from '@/infra/adapters/validation/schemas/ports/schema-validator'
 import { SchemaValidationError } from '@/infra/adapters/validation/errors/schema-validation.error'
 
-export abstract class SchemaParser {
+export abstract class ZodSchemaParser {
   static parse<T = SchemaParseResult>(schema: z.Schema, data: unknown): T {
     const parsedSchema = schema.safeParse(data)
     if (!parsedSchema.success) {
