@@ -17,8 +17,6 @@
     "test:staged": "vitest related --run",
     "test:ci": "vitest --run --silent --coverage",
     "test:dir": "vitest --run --silent --reporter verbose --dir",
-    "migrate:up": "prisma migrate dev",
-    "migrate:down": "prisma migrate reset",
     "migrate:dev:up": "dotenv -e .env.development -- npx prisma migrate dev",
     "migrate:dev:down": "dotenv -e .env.development -- npx prisma migrate reset",
     "migrate:test:up": "dotenv -e .env.test -- npx prisma migrate dev",
