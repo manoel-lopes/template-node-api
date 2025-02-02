@@ -24,7 +24,7 @@ export default [
       'no-unused-vars': 'off',
       'no-console': ['error', { allow: ['error'] }],
       '@stylistic/max-len': ['warn', {
-        code: 99,
+        code: 104,
         tabWidth: 2,
         ignoreUrls: true,
         ignoreComments: false,
