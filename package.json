@@ -13,7 +13,7 @@
     "test:unit": "vitest --run --passWithNoTests --silent --reporter verbose",
     "test:unit:watch": "vitest --passWithNoTests --silent --reporter verbose",
     "test:e2e": "vitest --run --silent --reporter verbose --dir src/main/routes",
-    "test:int": "vitest --run --passWithNoTests --no-threads --silent --reporter verbose --dir src/main/routes",
+    "test:int": "vitest --run --passWithNoTests --pool=forks --silent --reporter verbose --dir src/main/routes",
     "test:staged": "vitest related --run",
     "test:ci": "vitest --run --silent --coverage",
     "test:dir": "vitest --run --silent --reporter verbose --dir",
