@@ -1,4 +1,4 @@
-import type { SchemaParseResult, SchemaValidator } from '../ports/schema-validator'
+import type { SchemaParseResult, SchemaValidator } from '@/infra/validation/ports/schema.validator'
 
 export class SchemaValidatorStub<T=SchemaParseResult> implements SchemaValidator<T> {
   validate() {

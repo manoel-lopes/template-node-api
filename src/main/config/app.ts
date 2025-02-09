@@ -1,7 +1,7 @@
 import { FastifyAdapter } from '@/infra/adapters/http/http-server/fasitfy/fasitfy.adapter'
 import {
   SchemaValidationError,
-} from '@/infra/adapters/validation/errors/schema-validation.error'
+} from '@/infra/validation/errors/schema-validation.error'
 import { badRequest, unprocessable } from '@/presentation/helpers/http-helpers'
 import { env } from '@/lib/env'
 import { setRoutes } from './routes'

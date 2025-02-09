@@ -1,5 +1,5 @@
-import { SchemaValidationError } from '@/infra/adapters/validation/errors/schema-validation.error'
-import type { SchemaParseResult } from '@/infra/adapters/validation/schemas/ports/schema-validator'
+import { SchemaValidationError } from '@/infra/validation/errors/schema-validation.error'
+import type { SchemaParseResult } from '@/infra/validation/ports/schema.validator'
 import { z } from 'zod'
 
 type URLParam = 'param' | 'query'
