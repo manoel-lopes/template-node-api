@@ -1,40 +1,63 @@
-import { z } from 'zod'
-import type {
-  SchemaParseResult,
-} from '@/infra/adapters/validation/schemas/ports/schema-validator'
 import { SchemaValidationError } from '@/infra/adapters/validation/errors/schema-validation.error'
+import type { SchemaParseResult } from '@/infra/adapters/validation/schemas/ports/schema-validator'
+import { z } from 'zod'
+
+type URLParam = 'param' | 'query'
+type URLParamType = 'route param' | 'query param'
+type URLParamTypeReplacements = Record<URLParam, URLParamType>
 
 export abstract class ZodSchemaParser {
   static parse<T = SchemaParseResult>(schema: z.Schema, data: unknown): T {
     const parsedSchema = schema.safeParse(data)
     if (!parsedSchema.success) {
-      const errorMessage = this.formatValidationErrorMessage(
-        this.makeSchemaValidationErrorMessage(parsedSchema.error.errors[0]),
-      )
-      throw new SchemaValidationError(errorMessage)
+      throw new SchemaValidationError(this.formatErrorMessage(parsedSchema.error.errors[0]))
     }
     return parsedSchema.data
   }
 
-  private static makeSchemaValidationErrorMessage(issue: z.ZodIssue): string {
-    const { path, message } = issue
-    const field = path[0]
-    const msg = message.toLowerCase()
-    if (path.length === 1) {
-      return this.getFieldErrorMessage(String(field), msg)
-    }
-    const [_, object, subField] = path
-    return `${object} ${subField} ${msg}`
+  private static formatErrorMessage(issue: z.ZodIssue) {
+    const paramPath = issue.path.join(' ')
+    const param = this.normalizeURLParam(paramPath)
+    const message = this.normalizeErrorMessage(issue.message.toLowerCase(), param)
+    return this.formatCharacterMessage(message)
   }
 
-  private static getFieldErrorMessage(field: string, msg: string): string {
-    if (msg.includes('invalid')) {
-      return `Invalid ${field}`
+  private static normalizeURLParam(param: string): string {
+    const replacements: URLParamTypeReplacements = {
+      param: 'route param',
+      query: 'query param',
     }
-    return `Field '${field}' ${msg === 'required' ? `is ${msg}` : msg}`
+
+    let formattedParam = param
+    const patterns: { [key: string]: string } = {
+      '^params ': 'route param \'',
+      '^query ': 'query param \'',
+    }
+
+    for (const [pattern, replacement] of Object.entries(patterns)) {
+      const regex = new RegExp(pattern)
+      if (regex.test(formattedParam)) {
+        formattedParam = formattedParam.replace(regex, replacement) + '\''
+        break
+      }
+    }
+
+    const trimmedParam = formattedParam.trim() as URLParam
+    return replacements[trimmedParam] || formattedParam
   }
 
-  private static formatValidationErrorMessage(message: string): string {
+  private static normalizeErrorMessage(message: string, param: string) {
+    const formattedMessage = message
+    if (formattedMessage.includes('invalid')) {
+      return `Invalid ${param}`
+    }
+
+    return formattedMessage.includes('required')
+      ? `The ${param} is required`
+      : `The ${formattedMessage}`
+  }
+
+  private static formatCharacterMessage(message: string): string {
     return message.replace(/(\d+)\scharacter\(s\)/g, (_, num) => {
       return `${num} character${num > 1 ? 's' : ''}`
     })
