@@ -20,27 +20,30 @@ export default [
     },
     rules: {
       'no-useless-constructor': 'off',
-      'no-var': 'error',
       'no-unused-vars': 'off',
+      'no-var': 'error',
       'no-console': ['error', { allow: ['error'] }],
+      '@stylistic/function-paren-newline': ['warn', 'multiline'],
       '@stylistic/max-len': ['warn', {
-        code: 104,
+        code: 100,
         tabWidth: 2,
         ignoreUrls: true,
         ignoreComments: false,
       }],
-      '@stylistic/object-curly-newline': 'off',
-      '@stylistic/object-property-newline': 'off',
-      '@stylistic/space-before-function-paren': ['error',
-        {
-          anonymous: 'always',
-          asyncArrow: 'always',
-          named: 'never',
-        },
-      ],
-      '@stylistic/comma-dangle': ['error', 'always-multiline'],
+      '@stylistic/space-before-function-paren': ['warn', {
+        anonymous: 'always',
+        asyncArrow: 'always',
+        named: 'always',
+      }],
       '@stylistic/multiline-ternary': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-useless-constructor': 'error',
+      '@typescript-eslint/parameter-properties': ['error', {
+        allow: [
+          'readonly',
+          'private',
+          'private readonly'],
+      }],
       '@typescript-eslint/no-unused-vars': ['error', {
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',
