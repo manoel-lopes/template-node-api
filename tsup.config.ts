@@ -7,7 +7,7 @@ export default defineConfig({
     '!src/**/*.{test, spec}.ts',
     '!src/application/repositories/*.ts',
     '!src/util/factories/*.ts',
-    '!src/**/{models,ports,stubs,in-memory,types}/**/*.ts',
+    '!src/**/{models,ports,doubles,stubs,in-memory,types}/**/*.ts',
   ],
   clean: true,
 })
