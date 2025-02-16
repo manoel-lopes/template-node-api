@@ -1,12 +1,21 @@
-import type { HttpRequest, HttpStatusCode } from '@/infra/http/ports/http-protocol'
+import type { HttpStatusCode } from '@/infra/http/ports/http-protocol'
 
-export type ApiRequest = HttpRequest
+export type ApiRequest = {
+  body?: unknown
+  params?: unknown
+  query?: unknown
+}
 
 export type ApiResponse = {
   code(statusCode: HttpStatusCode): { send(body?: unknown): unknown }
 }
 
-type HttpRequestSchema = HttpRequest
+export type HttpRequestSchema<Body = unknown, Params = unknown, Query = unknown> = {
+  body?: Body
+  params?: Params
+  query?: Query
+}
+
 export type HttpResponseSchema = Partial<Record<HttpStatusCode, unknown>>
 
 export type SchemaOptions = {
@@ -42,3 +51,4 @@ export type HttpServer = {
   setErrorHandler(errorHandler: ErrorHandler): void
   use(middleware: Middleware): void
 }
+
