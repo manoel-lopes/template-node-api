@@ -28,7 +28,7 @@ export const conflict = (err: Error): HttpResponse => {
   return httpError({ name: 'Conflict', message: err.message })
 }
 
-export const unprocessable = (err: Error): HttpResponse => {
+export const unprocessableEntity = (err: Error): HttpResponse => {
   return httpError({ name: 'Unprocessable Entity', message: err.message })
 }
 

@@ -11,7 +11,7 @@ setRoutes(app)
 app.setErrorHandler((error, _, res) => {
   if (error instanceof SchemaValidationError) {
     const isRequiredError = error.message.includes('required')
-    const httpError = isRequiredError ? badRequest(error) : unprocessable(error)
+    const httpError = isRequiredError ? badRequest(error) : unprocessableEntity(error)
     return res.code(httpError.statusCode).send(httpError.body)
   }
 
