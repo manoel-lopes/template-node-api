@@ -1,4 +1,4 @@
-import type { HttpStatusCode } from '@/infra/http/ports/http-protocol'
+import type { HttpRequest, HttpStatusCode } from '@/infra/http/ports/http-protocol'
 
 export type ApiRequest = {
   body?: unknown
@@ -18,7 +18,7 @@ export type HttpRequestSchema<Body = unknown, Params = unknown, Query = unknown>
 
 export type HttpResponseSchema = Partial<Record<HttpStatusCode, unknown>>
 
-export type SchemaOptions = {
+export type RouteSchema = {
   tags?: string[]
   description?: string
   headers?: unknown
@@ -27,7 +27,7 @@ export type SchemaOptions = {
 }
 
 export type RouteOptions = {
-  schema?: SchemaOptions
+  schema?: RouteSchema
 }
 
 export type Middleware = (
