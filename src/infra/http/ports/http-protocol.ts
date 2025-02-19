@@ -6,12 +6,12 @@ export type BodyParams = Record<string, unknown>
 export type RouteParams = Record<string, string>
 export type QueryParams = unknown
 export type HttpRequest<
-Body = BodyParams | undefined,
-Params = RouteParams | undefined,
-Query = QueryParams | undefined> = {
-  body: Body
-  params: Params
-  query: Query
+Body = BodyParams,
+Params = RouteParams,
+Query = QueryParams> = {
+  body?: Body
+  params?: Params
+  query?: Query
 }
 
 export type HttpResponse<Body = unknown> = {
