@@ -10,6 +10,7 @@ const mockResponse = () => {
 }
 
 describe('FallbackController', () => {
+  let res: ReturnType<typeof mockResponse>
   const mocks = vi.hoisted(() => ({
     env: {
       NODE_ENV: 'development',
@@ -19,12 +20,12 @@ describe('FallbackController', () => {
   vi.mock('@/lib/env', () => mocks)
 
   beforeEach(() => {
+    res = mockResponse()
     vi.spyOn(console, 'error').mockClear()
   })
 
   it('should handle a schema validation error sending a bad request error http response', () => {
     const error = new SchemaValidationError('Field is required')
-    const res = mockResponse()
 
     FallbackController.handle(error, {}, res)
 
@@ -37,7 +38,6 @@ describe('FallbackController', () => {
 
   it('should handle an schema validation error with unprocessable entity error http response', () => {
     const error = new SchemaValidationError('Invalid format')
-    const res = mockResponse()
 
     FallbackController.handle(error, {}, res)
 
@@ -50,7 +50,6 @@ describe('FallbackController', () => {
 
   it('should log an unexpected error and return an internal server error http response', () => {
     const error = new Error('Unexpected error')
-    const res = mockResponse()
     vi.spyOn(console, 'error').mockImplementation(() => {})
 
     FallbackController.handle(error, {}, res)
@@ -66,7 +65,6 @@ describe('FallbackController', () => {
   it('should not log error in production and return an internal server error http response', () => {
     mocks.env.NODE_ENV = 'production'
     const error = new Error('Unexpected error')
-    const res = mockResponse()
     vi.spyOn(console, 'error').mockImplementation(() => {})
 
     FallbackController.handle(error, {}, res)
