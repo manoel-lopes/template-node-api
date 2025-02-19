@@ -62,7 +62,7 @@ describe('FallbackController', () => {
     })
   })
 
-  it('should not log error in production and return an internal server error http response', () => {
+  it('should not log an unexpected error and return an internal server error http response', () => {
     mocks.env.NODE_ENV = 'production'
     const error = new Error('Unexpected error')
     vi.spyOn(console, 'error').mockImplementation(() => {})
