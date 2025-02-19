@@ -1,5 +1,4 @@
 import { SchemaValidationError } from '@/infra/validation/errors/schema-validation.error'
-import type { ApiRequest, ApiResponse } from '@/infra/adapters/http/ports/http-server'
 import { FallbackController } from './fallback.controller'
 
 const mockResponse = () => {
@@ -27,7 +26,7 @@ describe('FallbackController', () => {
     const error = new SchemaValidationError('Field is required')
     const res = mockResponse()
 
-    FallbackController.handle(error, {} as ApiRequest, res as unknown as ApiResponse)
+    FallbackController.handle(error, {}, res)
 
     expect(res.code).toHaveBeenCalledWith(400)
     expect(res.send).toHaveBeenCalledWith({
@@ -40,7 +39,7 @@ describe('FallbackController', () => {
     const error = new SchemaValidationError('Invalid format')
     const res = mockResponse()
 
-    FallbackController.handle(error, {} as ApiRequest, res as unknown as ApiResponse)
+    FallbackController.handle(error, {}, res)
 
     expect(res.code).toHaveBeenCalledWith(422)
     expect(res.send).toHaveBeenCalledWith({
@@ -54,7 +53,7 @@ describe('FallbackController', () => {
     const res = mockResponse()
     vi.spyOn(console, 'error').mockImplementation(() => {})
 
-    FallbackController.handle(error, {} as ApiRequest, res as unknown as ApiResponse)
+    FallbackController.handle(error, {}, res)
 
     expect(console.error).toHaveBeenCalledWith({ errors: error.message })
     expect(res.code).toHaveBeenCalledWith(500)
@@ -70,7 +69,7 @@ describe('FallbackController', () => {
     const res = mockResponse()
     vi.spyOn(console, 'error').mockImplementation(() => {})
 
-    FallbackController.handle(error, {} as ApiRequest, res as unknown as ApiResponse)
+    FallbackController.handle(error, {}, res)
 
     expect(console.error).not.toHaveBeenCalled()
     expect(res.code).toHaveBeenCalledWith(500)
