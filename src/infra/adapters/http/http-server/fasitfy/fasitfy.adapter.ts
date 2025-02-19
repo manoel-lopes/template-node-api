@@ -3,7 +3,8 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import {
   jsonSchemaTransform,
   serializerCompiler,
-  type ZodTypeProvider } from 'fastify-type-provider-zod'
+  type ZodTypeProvider
+} from 'fastify-type-provider-zod'
 import cors from '@fastify/cors'
 import { fastifySwagger } from '@fastify/swagger'
 import { fastifySwaggerUi } from '@fastify/swagger-ui'
@@ -12,7 +13,8 @@ import type {
   Middleware,
   RouteOptions,
   ListenOptions,
-  ErrorHandler } from '@/infra/adapters/http/ports/http-server'
+  ErrorHandler
+} from '@/infra/adapters/http/ports/http-server'
 import type { HttpMethod } from '@/infra/http/ports/http-protocol'
 import { env } from '@/lib/env'
 
@@ -32,19 +34,19 @@ type RouteHandlersOptions = {
 export class FastifyAdapter implements HttpServer {
   private readonly app: FastifyInstance
   private readonly middlewares: Middleware[] = []
-  constructor() {
+  constructor () {
     this.app = this.createAppInstance()
     this.registerPlugins()
     Object.freeze(this)
   }
 
-  private createAppInstance() {
+  private createAppInstance () {
     return Fastify({
       logger: env.NODE_ENV === 'development',
     }).withTypeProvider<ZodTypeProvider>()
   }
 
-  private registerPlugins() {
+  private registerPlugins () {
     this.app.register(cors)
     this.app.setValidatorCompiler(() => (value) => ({ value }))
     this.app.setSerializerCompiler(serializerCompiler)
@@ -59,53 +61,57 @@ export class FastifyAdapter implements HttpServer {
     this.app.register(fastifySwaggerUi, { routePrefix: '/docs' })
   }
 
-  use(middleware: Middleware) {
+  use (middleware: Middleware) {
     this.middlewares.push(middleware)
   }
 
-  get(url: string, options: RouteOptions, ...handlers: Middleware[]) {
+  get (url: string, options: RouteOptions, ...handlers: Middleware[]) {
     this.registerRoute({ method: 'GET', url, options, handlers })
   }
 
-  post(url: string, options: RouteOptions, ...handlers: Middleware[]) {
+  post (url: string, options: RouteOptions, ...handlers: Middleware[]) {
     this.registerRoute({ method: 'POST', url, options, handlers })
   }
 
-  put(url: string, options: RouteOptions, ...handlers: Middleware[]) {
+  put (url: string, options: RouteOptions, ...handlers: Middleware[]) {
     this.registerRoute({ method: 'PUT', url, options, handlers })
   }
 
-  patch(url: string, options: RouteOptions, ...handlers: Middleware[]) {
+  patch (url: string, options: RouteOptions, ...handlers: Middleware[]) {
     this.registerRoute({ method: 'PATCH', url, options, handlers })
   }
 
-  delete(url: string, options: RouteOptions, ...handlers: Middleware[]) {
+  delete (url: string, options: RouteOptions, ...handlers: Middleware[]) {
     this.registerRoute({ method: 'DELETE', url, options, handlers })
   }
 
-  setErrorHandler(errorHandler: ErrorHandler) {
+  setErrorHandler (errorHandler: ErrorHandler) {
     this.app.setErrorHandler(errorHandler)
   }
 
-  async listen(options?: ListenOptions) {
+  async listen (options?: ListenOptions) {
     await this.app.listen({ port: env.PORT, host: '0.0.0.0', ...options })
   }
 
-  async close() {
+  async close () {
     await this.app.close()
   }
 
-  private registerRoute(route: ServerRoute) {
+  private registerRoute (route: ServerRoute) {
     const { options, handlers } = route
     const schema = { ...options.schema, ...options.schema?.request }
     this.app.register((instance) => {
-      instance.route({ ...route, schema, handler: (req, reply) => {
-        this.executeHandlers({ req, reply, handlers })
-      } })
+      instance.route({
+        ...route,
+        schema,
+        handler: (req, reply) => {
+          this.executeHandlers({ req, reply, handlers })
+        }
+      })
     })
   }
 
-  private async executeHandlers(opts: RouteHandlersOptions) {
+  private async executeHandlers (opts: RouteHandlersOptions) {
     const { handlers, req, reply } = opts
     try {
       for (const handler of [...this.middlewares, ...handlers]) {

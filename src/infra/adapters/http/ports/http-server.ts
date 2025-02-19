@@ -51,4 +51,3 @@ export type HttpServer = {
   setErrorHandler(errorHandler: ErrorHandler): void
   use(middleware: Middleware): void
 }
-
