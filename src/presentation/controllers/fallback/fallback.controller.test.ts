@@ -16,11 +16,11 @@ describe('FallbackController', () => {
     }
   }))
 
+  vi.mock('@/lib/env', () => mocks)
+
   beforeEach(() => {
     vi.spyOn(console, 'error').mockClear()
   })
-
-  vi.mock('@/lib/env', () => mocks)
 
   it('should handle a schema validation error sending a bad request error http response', () => {
     const error = new SchemaValidationError('Field is required')
