@@ -1,6 +1,6 @@
 import type { HttpRequest, HttpStatusCode } from '@/infra/http/ports/http-protocol'
 
-export type ApiRequest = HttpRequest<unknown, unknown, unknown>
+export type ApiRequest = HttpRequest
 
 export type ApiResponse = {
   code(statusCode: HttpStatusCode): { send(body?: unknown): unknown }
