@@ -3,7 +3,7 @@ import type { ApiRequest, ApiResponse } from '@/infra/adapters/http/ports/http-s
 import { badRequest, unprocessableEntity } from '@/presentation/helpers/http-helpers'
 import { env } from '@/lib/env'
 
-export class FallbackController {
+export abstract class FallbackController {
   static handle (error: Error, _: ApiRequest, res: ApiResponse) {
     if (error instanceof SchemaValidationError) {
       const isRequiredError = error.message.includes('required')
