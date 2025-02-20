@@ -45,5 +45,4 @@ export type HttpServer = {
   listen(options?: ListenOptions): Promise<void>
   close(): Promise<void>
   setErrorHandler(errorHandler: ErrorHandler): void
-  use(middleware: Middleware): void
 }

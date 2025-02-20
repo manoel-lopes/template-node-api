@@ -33,11 +33,9 @@ type RouteHandlersOptions = {
 
 export class FastifyAdapter implements HttpServer {
   private readonly app: FastifyInstance
-  private readonly middlewares: Middleware[] = []
   constructor () {
     this.app = this.createAppInstance()
     this.registerPlugins()
-    Object.freeze(this)
   }
 
   private createAppInstance () {
@@ -59,10 +57,6 @@ export class FastifyAdapter implements HttpServer {
       transform: jsonSchemaTransform,
     })
     this.app.register(fastifySwaggerUi, { routePrefix: '/docs' })
-  }
-
-  use (middleware: Middleware) {
-    this.middlewares.push(middleware)
   }
 
   get (url: string, options: RouteOptions, ...handlers: Middleware[]) {
@@ -111,10 +105,9 @@ export class FastifyAdapter implements HttpServer {
     })
   }
 
-  private async executeHandlers (opts: RouteHandlersOptions) {
-    const { handlers, req, reply } = opts
+  private async executeHandlers ({ handlers, req, reply }: RouteHandlersOptions) {
     try {
-      for (const handler of [...this.middlewares, ...handlers]) {
+      for (const handler of handlers) {
         await handler(req, reply)
       }
     } catch (error) {
