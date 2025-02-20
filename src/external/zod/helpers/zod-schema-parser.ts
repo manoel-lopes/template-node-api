@@ -1,6 +1,6 @@
-import { SchemaValidationError } from '@/infra/validation/errors/schema-validation.error'
-import type { SchemaParseResult } from '@/infra/validation/ports/schema.validator'
 import { z } from 'zod'
+import type { SchemaParseResult } from '@/infra/validation/ports/schema.validator'
+import { SchemaValidationError } from '@/infra/validation/errors/schema-validation.error'
 
 type URLParam = 'param' | 'query'
 type URLParamType = 'route param' | 'query param'
@@ -18,6 +18,10 @@ export abstract class ZodSchemaParser {
   private static formatErrorMessage (issue: z.ZodIssue) {
     const paramPath = issue.path.join(' ')
     const param = this.normalizeURLParam(paramPath)
+    if (!param) {
+      return 'Request body is missing or empty'
+    }
+
     const message = this.normalizeErrorMessage(issue.message.toLowerCase(), param)
     return this.formatCharacterMessage(message)
   }
