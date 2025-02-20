@@ -6,6 +6,11 @@ import { env } from '@/lib/env'
 export abstract class FallbackController {
   static handle (error: Error, _: ApiRequest, res: ApiResponse) {
     if (error instanceof SchemaValidationError) {
+      const isEmptyRequestBodyError = error.message.includes('empty')
+      if (isEmptyRequestBodyError) {
+        return badRequest(error)
+      }
+
       const isRequiredError = error.message.includes('required')
       const httpError = isRequiredError ? badRequest(error) : unprocessableEntity(error)
       return res.code(httpError.statusCode).send(httpError.body)
