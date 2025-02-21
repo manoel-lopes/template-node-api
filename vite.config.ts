@@ -1,6 +1,10 @@
 import path from 'node:path'
 import { defineConfig, configDefaults } from 'vitest/config'
 
+function resolve (dir: string) {
+  return path.join(__dirname, dir)
+}
+
 const exclude = [
   ...configDefaults.exclude,
   'src/main',
@@ -31,7 +35,3 @@ export default defineConfig({
     },
   },
 })
-
-function resolve (dir) {
-  return path.join(__dirname, dir)
-}
