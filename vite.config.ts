@@ -9,7 +9,7 @@ const exclude = [
 export default defineConfig({
   resolve: {
     alias: {
-      '@/': path.resolve(__dirname, './src'),
+      '@/': resolve('./src'),
     },
   },
   test: {
@@ -31,3 +31,7 @@ export default defineConfig({
     },
   },
 })
+
+function resolve (dir: string) {
+  return path.join(__dirname, dir)
+}
