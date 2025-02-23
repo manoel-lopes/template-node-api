@@ -48,6 +48,18 @@ describe('FallbackController', () => {
     })
   })
 
+  it('should handle an empty request body error sending a bad request error http response', () => {
+    const error = new SchemaValidationError('Request body is missing or empty')
+
+    FallbackController.handle(error, {}, res)
+
+    expect(res.code).toHaveBeenCalledWith(400)
+    expect(res.send).toHaveBeenCalledWith({
+      error: 'Bad Request',
+      message: error.message,
+    })
+  })
+
   it('should log an unexpected error and return an internal server error http response', () => {
     const error = new Error('Unexpected error')
     vi.spyOn(console, 'error').mockImplementation(() => {})
