@@ -20,6 +20,7 @@ export default [
     },
     rules: {
       'no-useless-constructor': 'off',
+      '@typescript-eslint/no-useless-constructor': 'off',
       'no-unused-vars': 'off',
       'no-var': 'error',
       'no-console': ['error', { allow: ['error'] }],
@@ -37,7 +38,6 @@ export default [
       }],
       '@stylistic/multiline-ternary': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-useless-constructor': 'error',
       '@typescript-eslint/parameter-properties': ['error', {
         allow: [
           'readonly',
