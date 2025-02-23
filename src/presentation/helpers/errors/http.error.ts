@@ -6,8 +6,7 @@ export type HttpErrorType =
 | 'Conflict'
 | 'Unprocessable Entity'
 
-export class HttpError extends Error {
-  constructor (readonly name: HttpErrorType, message: string) {
-    super(message)
-  }
+export interface HttpError extends Error {
+  readonly name: HttpErrorType
+  readonly message: string
 }
