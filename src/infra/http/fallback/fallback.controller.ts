@@ -8,7 +8,8 @@ export abstract class FallbackController {
     if (error instanceof SchemaValidationError) {
       const isEmptyRequestBodyError = error.message.includes('empty')
       if (isEmptyRequestBodyError) {
-        return badRequest(error)
+        const { statusCode, body } = badRequest(error)
+        return res.code(statusCode).send(body)
       }
 
       const isRequiredError = error.message.includes('required')
