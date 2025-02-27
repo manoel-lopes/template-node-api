@@ -58,7 +58,7 @@ export abstract class ZodSchemaParser {
 
     return formattedMessage.includes('required')
       ? `The ${param} is required`
-      : `The ${formattedMessage}`
+      : `The ${param} ${formattedMessage}`
   }
 
   private static formatCharacterMessage (message: string): string {
