@@ -43,6 +43,7 @@ export type HttpServer = {
   patch(url: string, options: RouteOptions, ...handlers: Middleware[]): void
   delete(url: string, options: RouteOptions, ...handlers: Middleware[]): void
   listen(options?: ListenOptions): Promise<void>
+  register(setupRoute: (app: HttpServer) => void): void
   close(): Promise<void>
   setErrorHandler(errorHandler: ErrorHandler): void
 }

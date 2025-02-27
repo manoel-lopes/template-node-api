@@ -33,6 +33,7 @@ type RouteHandlersOptions = {
 
 export class FastifyAdapter implements HttpServer {
   private readonly app: FastifyInstance
+
   constructor () {
     this.app = this.createAppInstance()
     this.registerPlugins()
@@ -57,6 +58,10 @@ export class FastifyAdapter implements HttpServer {
       transform: jsonSchemaTransform,
     })
     this.app.register(fastifySwaggerUi, { routePrefix: '/docs' })
+  }
+
+  register (setupRoute: (app: HttpServer) => void) {
+    setupRoute(this)
   }
 
   get (url: string, options: RouteOptions, ...handlers: Middleware[]) {
@@ -100,7 +105,7 @@ export class FastifyAdapter implements HttpServer {
         schema,
         handler: (req, reply) => {
           this.executeHandlers({ req, reply, handlers })
-        }
+        },
       })
     })
   }
