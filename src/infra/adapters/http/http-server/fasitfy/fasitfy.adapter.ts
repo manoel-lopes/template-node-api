@@ -25,12 +25,6 @@ type ServerRoute = {
   handlers: Middleware[]
 }
 
-type RouteHandlersOptions = {
-  req: FastifyRequest,
-  reply: FastifyReply,
-  handlers: Middleware[]
-}
-
 export class FastifyAdapter implements HttpServer {
   private readonly app: FastifyInstance
 
@@ -99,21 +93,22 @@ export class FastifyAdapter implements HttpServer {
   private registerRoute (route: ServerRoute) {
     const { options, handlers } = route
     const schema = { ...options.schema, ...options.schema?.request }
-    this.app.register((instance) => {
-      instance.route({
-        ...route,
-        schema,
-        handler: (req, reply) => {
-          this.executeHandlers({ req, reply, handlers })
-        },
-      })
+
+    this.app.route({
+      ...route,
+      schema,
+      handler: async (req, reply) => {
+        const response = await this.executeHandlers(req, reply, handlers)
+        if (response) { reply.send(response) }
+      },
     })
   }
 
-  private async executeHandlers ({ handlers, req, reply }: RouteHandlersOptions) {
+  private async executeHandlers (req: FastifyRequest, reply: FastifyReply, handlers: Middleware[]) {
     try {
       for (const handler of handlers) {
-        await handler(req, reply)
+        const response = await handler(req, reply)
+        if (response) { return response }
       }
     } catch (error) {
       this.app.log.error(error)
