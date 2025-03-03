@@ -32,7 +32,7 @@ export type Middleware = (
   next?: () => void
 ) => Promise<unknown> | void
 
-export type ListenOptions = { port: number, host: string }
+export type ListenOptions = { port: number, host?: string }
 
 export type ErrorHandler = (error: Error, req: ApiRequest, res: ApiResponse) => void
 

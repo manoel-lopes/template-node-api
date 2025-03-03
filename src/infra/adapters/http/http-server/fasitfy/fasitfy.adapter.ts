@@ -88,8 +88,8 @@ export class FastifyAdapter implements HttpServer {
     this.app.setErrorHandler(errorHandler)
   }
 
-  async listen (options?: ListenOptions) {
-    await this.app.listen({ port: env.PORT, host: '0.0.0.0', ...options })
+  async listen (options: ListenOptions) {
+    await this.app.listen({ host: '0.0.0.0', ...options })
   }
 
   async close () {
