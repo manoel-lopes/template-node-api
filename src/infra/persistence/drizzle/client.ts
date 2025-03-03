@@ -1,9 +1,9 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { env } from '@/lib/env'
-import { dbConfig } from './config'
+import { dbCredentials } from './credential'
 
 const db = drizzle({
-  connection: dbConfig,
+  connection: dbCredentials,
   logger: env.NODE_ENV !== 'production',
 })
 
