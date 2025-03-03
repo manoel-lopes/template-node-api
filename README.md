@@ -12,23 +12,23 @@
 - 🟦 TypeScript  
 - 🐋 Docker  
 - 🐘 Postgres  
-- 🛠️ Redis  
+- 🛠️  Redis  
 - 🔍 Zod  
-- 🗃️ Prisma ORM  
+- 🗃️  Drizzle ORM    
 - 🧪 Vitest  
 - 🔬 Supertest  
-- 🛡️ Husky  
+- 🛡️  Husky  
 
 
 ## 🛠️ Design Patterns
 
 - 🔌 Adapter  
 - 🧩 Strategy  
-- 🗄️ Repository  
+- 🗄️  Repository  
 - 🏭 Factory  
-- 🏗️ Static Factory Method  
-- 🛠️ Abstract Factory  
-- 🛡️ Proxy 
+- 🏗️  Static Factory Method  
+- 🛠️  Abstract Factory  
+- 🛡️  Proxy 
 
 
 ## 🖌️ Design Approaches
@@ -41,9 +41,9 @@
 - 🎭 Fake  
 - 🔗 Stub
 - 👀 Spy
-- 🗂️ In Memory DataBase
+- 🗂️  In Memory DataBase
 
 
 ## 📜 Test Conventions
 
-- 🖥️ System Under Test (SUT)
+- 🖥️  System Under Test (SUT)
