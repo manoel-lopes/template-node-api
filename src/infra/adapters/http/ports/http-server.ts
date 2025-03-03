@@ -30,7 +30,7 @@ export type Middleware = (
   req: ApiRequest,
   res: ApiResponse,
   next?: () => void
-) => Promise<unknown> | void
+) => Promise<unknown> | unknown
 
 export type ListenOptions = { port: number, host?: string }
 
