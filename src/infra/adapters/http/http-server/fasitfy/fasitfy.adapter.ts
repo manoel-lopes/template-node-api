@@ -92,10 +92,10 @@ export class FastifyAdapter implements HttpServer {
   private registerRoute (route: ServerRoute) {
     const { options, handlers } = route
     const schema = { ...options.schema, ...options.schema?.request }
-    this.app.route({ ...route, schema, handler: this.registerHandler(handlers) })
+    this.app.route({ ...route, schema, handler: this.registerHandlers(handlers) })
   }
 
-  private registerHandler (handlers: Middleware[]) {
+  private registerHandlers (handlers: Middleware[]) {
     return async (req: FastifyRequest, reply: FastifyReply) => {
       try {
         for (const handler of handlers) {
