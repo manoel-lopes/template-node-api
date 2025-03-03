@@ -16,7 +16,6 @@ import type {
   ErrorHandler
 } from '@/infra/adapters/http/ports/http-server'
 import type { HttpMethod } from '@/infra/http/ports/http-protocol'
-import { env } from '@/lib/env'
 
 type ServerRoute = {
   method: HttpMethod
@@ -28,14 +27,14 @@ type ServerRoute = {
 export class FastifyAdapter implements HttpServer {
   private readonly app: FastifyInstance
 
-  constructor () {
+  constructor (private readonly config?: { logger: boolean }) {
     this.app = this.createAppInstance()
     this.registerPlugins()
   }
 
   private createAppInstance () {
     return Fastify({
-      logger: env.NODE_ENV === 'development',
+      logger: this.config?.logger,
     }).withTypeProvider<ZodTypeProvider>()
   }
 
