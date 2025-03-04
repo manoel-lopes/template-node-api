@@ -24,10 +24,20 @@ type ServerRoute = {
   handlers: Middleware[]
 }
 
+type Config = {
+  logger?: boolean
+  openapi?: {
+    info?: {
+      title: string
+      version: string
+    }
+  }
+}
+
 export class FastifyAdapter implements HttpServer {
   private readonly app: FastifyInstance
 
-  constructor (private readonly config?: { logger: boolean }) {
+  constructor (private readonly config?: Config) {
     this.app = this.createAppInstance()
     this.registerPlugins()
   }
@@ -43,11 +53,7 @@ export class FastifyAdapter implements HttpServer {
     this.app.setValidatorCompiler(() => (value) => ({ value }))
     this.app.setSerializerCompiler(serializerCompiler)
     this.app.register(fastifySwagger, {
-      openapi: {
-        info: {
-          title: 'Clean Forum API', version: '1.0.0',
-        },
-      },
+      openapi: this.config?.openapi,
       transform: jsonSchemaTransform,
     })
     this.app.register(fastifySwaggerUi, { routePrefix: '/docs' })
@@ -92,10 +98,10 @@ export class FastifyAdapter implements HttpServer {
   private registerRoute (route: ServerRoute) {
     const { options, handlers } = route
     const schema = { ...options.schema, ...options.schema?.request }
-    this.app.route({ ...route, schema, handler: this.registerHandlers(handlers) })
+    this.app.route({ ...route, schema, handler: this.registerRouteHandlers(handlers) })
   }
 
-  private registerHandlers (handlers: Middleware[]) {
+  private registerRouteHandlers (handlers: Middleware[]) {
     return async (req: FastifyRequest, reply: FastifyReply) => {
       try {
         for (const handler of handlers) {
