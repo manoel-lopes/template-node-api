@@ -1,4 +1,4 @@
-import type { InferInsertModel } from 'drizzle-orm'
+import { sql, type InferInsertModel } from 'drizzle-orm'
 import type { PgTable } from 'drizzle-orm/pg-core'
 import { db } from '@/infra/persistence/drizzle/client'
 
@@ -7,5 +7,9 @@ export abstract class BaseDrizzleRepository<Table extends PgTable> {
 
   async save (entity: InferInsertModel<Table>): Promise<void> {
     await db.insert(this.table).values(entity)
+  }
+
+  async findAll () {
+    return db.select().from(sql`${this.table}`)
   }
 }
