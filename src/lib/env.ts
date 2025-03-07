@@ -18,6 +18,15 @@ const _env = z
     DB_HOST: z.string(),
     DB_PORT: z.string().transform((port) => Number(port)),
     DB_NAME: z.string(),
+    REDIS_HOST: z.string().default('localhost'),
+    REDIS_PORT: z
+      .string()
+      .default('6379')
+      .transform((port) => Number(port)),
+    REDIS_DB:
+    z.string()
+      .default('0')
+      .transform((db) => Number(db)),
   })
   .safeParse(process.env)
 
