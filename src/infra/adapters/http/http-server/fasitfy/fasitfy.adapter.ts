@@ -3,7 +3,8 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import {
   jsonSchemaTransform,
   serializerCompiler,
-  type ZodTypeProvider
+  validatorCompiler,
+  type ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 import cors from '@fastify/cors'
 import { fastifySwagger } from '@fastify/swagger'
@@ -13,7 +14,7 @@ import type {
   Middleware,
   RouteOptions,
   ListenOptions,
-  ErrorHandler
+  ErrorHandler,
 } from '@/infra/adapters/http/ports/http-server'
 import type { HttpMethod } from '@/infra/http/ports/http-protocol'
 
@@ -24,8 +25,15 @@ type ServerRoute = {
   handlers: Middleware[]
 }
 
+type RouteHandlersOptions = {
+  req: FastifyRequest
+  reply: FastifyReply
+  handlers: Middleware[]
+}
+
 type Config = {
   logger?: boolean
+  validator?: boolean
   openapi?: {
     info?: {
       title: string
@@ -50,13 +58,21 @@ export class FastifyAdapter implements HttpServer {
 
   private registerPlugins () {
     this.app.register(cors)
-    this.app.setValidatorCompiler(() => (value) => ({ value }))
+    this.setValidatorCompiler()
     this.app.setSerializerCompiler(serializerCompiler)
     this.app.register(fastifySwagger, {
       openapi: this.config?.openapi,
       transform: jsonSchemaTransform,
     })
     this.app.register(fastifySwaggerUi, { routePrefix: '/docs' })
+  }
+
+  private setValidatorCompiler () {
+    if (this.config?.validator) {
+      this.app.setValidatorCompiler(validatorCompiler)
+    } else {
+      this.app.setValidatorCompiler(() => value => ({ value }))
+    }
   }
 
   register (setupRoute: (app: HttpServer) => void) {
@@ -98,20 +114,24 @@ export class FastifyAdapter implements HttpServer {
   private registerRoute (route: ServerRoute) {
     const { options, handlers } = route
     const schema = { ...options.schema, ...options.schema?.request }
-    this.app.route({ ...route, schema, handler: this.registerRouteHandlers(handlers) })
+    this.app.register(instance => {
+      instance.route({
+        ...route,
+        schema,
+        handler: (req, reply) => this.registerRouteHandlers({ req, reply, handlers }),
+      })
+    })
   }
 
-  private registerRouteHandlers (handlers: Middleware[]) {
-    return async (req: FastifyRequest, reply: FastifyReply) => {
-      try {
-        for (const handler of handlers) {
-          const response = await handler(req, reply)
-          if (response) reply.send(response)
-        }
-      } catch (error) {
-        this.app.log.error(error)
-        reply.send(error)
+  private async registerRouteHandlers ({ handlers, req, reply }: RouteHandlersOptions) {
+    try {
+      for (const handler of handlers) {
+        const response = await handler(req, reply)
+        if (response) reply.send(response)
       }
+    } catch (error) {
+      this.app.log.error(error)
+      reply.send(error)
     }
   }
 }
