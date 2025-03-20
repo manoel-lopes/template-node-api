@@ -6,9 +6,7 @@ type EnvParseError = [string, EnvErrorDetails]
 
 const _env = z
   .object({
-    NODE_ENV: z
-      .enum(['development', 'production', 'test'])
-      .default('development'),
+    NODE_ENV: z.enum(['development', 'production', 'test']),
     PORT: z
       .string()
       .default('3333')
