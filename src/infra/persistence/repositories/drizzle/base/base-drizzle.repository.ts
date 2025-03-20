@@ -11,13 +11,13 @@ export type FindOptions<Table extends PgTable> = {
 }
 
 export abstract class BaseDrizzleRepository<Table extends PgTable> {
-  constructor(private readonly table: Table) {}
+  constructor (private readonly table: Table) {}
 
-  async save(entity: InferInsertModel<Table>): Promise<void> {
+  async save (entity: InferInsertModel<Table>): Promise<void> {
     await db.insert(this.table).values(entity)
   }
 
-  async findOne({ where }: FindOptions<Table>): Promise<InferSelectModel<Table> | null> {
+  async findOne ({ where }: FindOptions<Table>): Promise<InferSelectModel<Table> | null> {
     const [entity] = (await db
       .select()
       .from(this.table as PgTable)
@@ -27,11 +27,11 @@ export abstract class BaseDrizzleRepository<Table extends PgTable> {
     return entity ?? null
   }
 
-  async deleteOne({ where }: FindOptions<Table>): Promise<void> {
+  async deleteOne ({ where }: FindOptions<Table>): Promise<void> {
     await db.delete(this.table).where(and(...this.buildWhereClause(where)))
   }
 
-  async updateOne(
+  async updateOne (
     { where }: FindOptions<Table>,
     data: Partial<InferInsertModel<Table>>
   ): Promise<InferSelectModel<Table>> {
@@ -44,9 +44,8 @@ export abstract class BaseDrizzleRepository<Table extends PgTable> {
     return updatedEntity
   }
 
-  private buildWhereClause(where: FindOptions<Table>['where']) {
+  private buildWhereClause (where: FindOptions<Table>['where']) {
     return Object.entries(where).map(([key, value]) =>
-      eq(this.table[key as keyof Table] as AnyPgColumn, value)
-    )
+      eq(this.table[key as keyof Table] as AnyPgColumn, value))
   }
 }
