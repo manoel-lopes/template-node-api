@@ -10,20 +10,21 @@ export abstract class ZodSchemaParser {
   static parse<T = SchemaParseResult>(schema: z.Schema, data: unknown): T {
     const parsedSchema = schema.safeParse(data)
     if (!parsedSchema.success) {
-      throw new SchemaValidationError(this.formatErrorMessage(parsedSchema.error.errors[0]))
+      const error = ZodSchemaParser.formatErrorMessage(parsedSchema.error.errors[0])
+      throw new SchemaValidationError(error)
     }
     return parsedSchema.data
   }
 
   private static formatErrorMessage (issue: z.ZodIssue) {
     const paramPath = issue.path.join(' ')
-    const param = this.normalizeURLParam(paramPath)
+    const param = ZodSchemaParser.normalizeURLParam(paramPath)
     if (!param) {
       return 'Request body is missing or empty'
     }
 
-    const message = this.normalizeErrorMessage(issue.message.toLowerCase(), param)
-    return this.formatCharacterMessage(message)
+    const message = ZodSchemaParser.normalizeErrorMessage(issue.message.toLowerCase(), param)
+    return ZodSchemaParser.formatCharacterMessage(message)
   }
 
   private static normalizeURLParam (param: string): string {
