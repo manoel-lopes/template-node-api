@@ -4,6 +4,7 @@ export type ApiRequest = HttpRequest
 
 export type ApiResponse = {
   code(statusCode: HttpStatusCode): { send(body?: unknown): unknown }
+  redirect(url: string): void
 }
 
 export type HttpRequestSchema<Body = unknown, Params = unknown, Query = unknown> = {
@@ -18,6 +19,7 @@ export type RouteSchema = {
   tags?: string[]
   description?: string
   headers?: unknown
+  summary?: string
   request?: HttpRequestSchema
   response?: HttpResponseSchema
 }
@@ -32,7 +34,7 @@ export type Middleware = (
   next?: () => void
 ) => Promise<unknown> | unknown
 
-export type ListenOptions = { port: number, host?: string }
+export type ListenOptions = { port: number; host?: string }
 
 export type ErrorHandler = (error: Error, req: ApiRequest, res: ApiResponse) => void
 
