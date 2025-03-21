@@ -1,4 +1,5 @@
-import type { HttpRequest, HttpStatusCode } from '@/infra/http/ports/http-protocol'
+import type { HttpRequest, HttpStatusCode, } from '@/infra/http/ports/http-protocol'
+import type { SchemaParseResult } from '@/infra/validation/ports/schema.validator'
 
 export type ApiRequest = HttpRequest
 
@@ -38,6 +39,8 @@ export type ListenOptions = { port: number; host?: string }
 
 export type ErrorHandler = (error: Error, req: ApiRequest, res: ApiResponse) => void
 
+export type SchemaParser<T=unknown> = (schema: T, data: unknown) => SchemaParseResult
+
 export type HttpServer = {
   get(url: string, options: RouteOptions, ...handlers: Middleware[]): void
   post(url: string, options: RouteOptions, ...handlers: Middleware[]): void
@@ -47,5 +50,6 @@ export type HttpServer = {
   listen(options?: ListenOptions): Promise<void>
   register(setupRoute: (app: HttpServer) => void): void
   close(): Promise<void>
+  setValidationCompiler(parserFn: SchemaParser): void
   setErrorHandler(errorHandler: ErrorHandler): void
 }
