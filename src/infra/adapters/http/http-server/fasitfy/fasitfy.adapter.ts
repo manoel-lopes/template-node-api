@@ -1,20 +1,21 @@
 import Fastify from 'fastify'
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyInstance, FastifyRequest, FastifyReply, FastifySchemaCompiler } from 'fastify'
 import {
   jsonSchemaTransform,
   serializerCompiler,
-  validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 import cors from '@fastify/cors'
 import { fastifySwagger } from '@fastify/swagger'
 import { fastifySwaggerUi } from '@fastify/swagger-ui'
+import type { Schema } from 'zod'
 import type {
   HttpServer,
   Middleware,
   RouteOptions,
   ListenOptions,
   ErrorHandler,
+  SchemaParser,
 } from '@/infra/adapters/http/ports/http-server'
 import type { HttpMethod } from '@/infra/http/ports/http-protocol'
 
@@ -33,7 +34,6 @@ type RouteHandlersOptions = {
 
 type Config = {
   logger?: boolean
-  validator?: boolean
   openapi?: {
     info?: {
       title: string
@@ -58,7 +58,6 @@ export class FastifyAdapter implements HttpServer {
 
   private registerPlugins () {
     this.app.register(cors)
-    this.setValidatorCompiler()
     this.app.setSerializerCompiler(serializerCompiler)
     this.app.register(fastifySwagger, {
       openapi: this.config?.openapi,
@@ -67,12 +66,11 @@ export class FastifyAdapter implements HttpServer {
     this.app.register(fastifySwaggerUi, { routePrefix: '/docs' })
   }
 
-  private setValidatorCompiler () {
-    if (this.config?.validator) {
-      this.app.setValidatorCompiler(validatorCompiler)
-    } else {
-      this.app.setValidatorCompiler(() => value => ({ value }))
+  setValidationCompiler (parserFn: SchemaParser<Schema>) {
+    const validationCompiler: FastifySchemaCompiler<Schema> = ({ schema }) => {
+      return (data: unknown) => parserFn(schema, data)
     }
+    this.app.setValidatorCompiler(validationCompiler)
   }
 
   register (setupRoute: (app: HttpServer) => void) {
