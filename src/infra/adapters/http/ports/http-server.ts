@@ -1,10 +1,14 @@
-import type { HttpRequest, HttpStatusCode } from '@/infra/http/ports/http-protocol'
+import type {
+  HttpRequest,
+  HttpStatusCode,
+  HttpRedirectStatusCode
+} from '@/infra/http/ports/http-protocol'
 
 export type ApiRequest = HttpRequest
 
 export type ApiResponse = {
   code(statusCode: HttpStatusCode): { send(body?: unknown): unknown }
-  redirect(url: string): void
+  redirect(url: string, code?: HttpRedirectStatusCode): void
 }
 
 export type HttpRequestSchema<Body = unknown, Params = unknown, Query = unknown> = {
