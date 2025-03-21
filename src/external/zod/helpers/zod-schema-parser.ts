@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import type { Schema, ZodIssue } from 'zod'
 import type { SchemaParseResult } from '@/infra/validation/ports/schema.validator'
 import { SchemaValidationError } from '@/infra/validation/errors/schema-validation.error'
 
@@ -7,23 +7,24 @@ type URLParamType = 'route param' | 'query param'
 type URLParamTypeReplacements = Record<URLParam, URLParamType>
 
 export abstract class ZodSchemaParser {
-  static parse<T = SchemaParseResult>(schema: z.Schema, data: unknown): T {
+  static parse<T = SchemaParseResult>(schema: Schema, data: unknown): T {
     const parsedSchema = schema.safeParse(data)
     if (!parsedSchema.success) {
-      throw new SchemaValidationError(this.formatErrorMessage(parsedSchema.error.errors[0]))
+      const error = ZodSchemaParser.formatErrorMessage(parsedSchema.error.errors[0])
+      throw new SchemaValidationError(error)
     }
     return parsedSchema.data
   }
 
-  private static formatErrorMessage (issue: z.ZodIssue) {
+  private static formatErrorMessage (issue: ZodIssue) {
     const paramPath = issue.path.join(' ')
-    const param = this.normalizeURLParam(paramPath)
+    const param = ZodSchemaParser.normalizeURLParam(paramPath)
     if (!param) {
       return 'Request body is missing or empty'
     }
 
-    const message = this.normalizeErrorMessage(issue.message.toLowerCase(), param)
-    return this.formatCharacterMessage(message)
+    const message = ZodSchemaParser.normalizeErrorMessage(issue.message.toLowerCase(), param)
+    return ZodSchemaParser.formatCharacterMessage(message)
   }
 
   private static normalizeURLParam (param: string): string {
@@ -34,14 +35,14 @@ export abstract class ZodSchemaParser {
 
     let formattedParam = param
     const patterns: { [key: string]: string } = {
-      '^params ': 'route param \'',
-      '^query ': 'query param \'',
+      '^params ': "route param '",
+      '^query ': "query param '",
     }
 
     for (const [pattern, replacement] of Object.entries(patterns)) {
       const regex = new RegExp(pattern)
       if (regex.test(formattedParam)) {
-        formattedParam = formattedParam.replace(regex, replacement) + '\''
+        formattedParam = `${formattedParam.replace(regex, replacement)}'`
         break
       }
     }
