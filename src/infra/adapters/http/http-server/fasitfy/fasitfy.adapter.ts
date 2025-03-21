@@ -66,13 +66,6 @@ export class FastifyAdapter implements HttpServer {
     this.app.register(fastifySwaggerUi, { routePrefix: '/docs' })
   }
 
-  setValidationCompiler (parserFn: SchemaParser<Schema>) {
-    const validationCompiler: FastifySchemaCompiler<Schema> = ({ schema }) => {
-      return (data: unknown) => parserFn(schema, data)
-    }
-    this.app.setValidatorCompiler(validationCompiler)
-  }
-
   register (setupRoute: (app: HttpServer) => void) {
     setupRoute(this)
   }
@@ -99,6 +92,13 @@ export class FastifyAdapter implements HttpServer {
 
   setErrorHandler (errorHandler: ErrorHandler) {
     this.app.setErrorHandler(errorHandler)
+  }
+
+  setValidationCompiler (parserFn: SchemaParser<Schema>) {
+    const validationCompiler: FastifySchemaCompiler<Schema> = ({ schema }) => {
+      return (data: unknown) => parserFn(schema, data)
+    }
+    this.app.setValidatorCompiler(validationCompiler)
   }
 
   async listen (options: ListenOptions) {
