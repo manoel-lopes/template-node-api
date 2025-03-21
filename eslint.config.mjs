@@ -26,7 +26,7 @@ export default [
       'no-console': ['error', { allow: ['error'] }],
       '@stylistic/function-paren-newline': ['warn', 'multiline'],
       '@stylistic/max-len': ['warn', {
-        code: 102,
+        code: 104,
         tabWidth: 2,
         ignoreUrls: true,
         ignoreComments: false,
