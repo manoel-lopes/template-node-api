@@ -3,7 +3,7 @@ import type {
   HttpStatusCode,
   HttpRedirectStatusCode,
 } from '@/infra/http/ports/http-protocol'
-import type { SchemaParseResult } from '@/infra/validation/ports/schema.validator'
+import type { SchemaParseResult } from '@/infra/validation/ports/schema-parse-result'
 
 export type ApiRequest = HttpRequest
 
