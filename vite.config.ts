@@ -19,6 +19,7 @@ export default defineConfig({
       provider: 'istanbul',
       exclude: [
         ...exclude,
+        '**/drizzle/**',
         'src/lib',
         'src/util',
         'src/external',
