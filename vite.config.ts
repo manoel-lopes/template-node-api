@@ -9,7 +9,7 @@ const exclude = [
 export default defineConfig({
   resolve: {
     alias: {
-      '@/': resolve('./src/'),
+      '@/': resolve('./src'),
     },
   },
   test: {
@@ -19,14 +19,13 @@ export default defineConfig({
       provider: 'istanbul',
       exclude: [
         ...exclude,
+        '**/prisma/**',
         'src/lib',
         'src/util',
         'src/external',
         'src/infra/adapters/http/http-server/fasitfy',
         'src/infra/persistence/repositories/cache',
-        'src/infra/validation/schemas/zod',
         'src/infra/providers/cache/redis',
-        'src/infra/persistence/db',
       ],
     },
   },
