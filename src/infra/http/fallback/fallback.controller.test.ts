@@ -5,6 +5,7 @@ const mockResponse = () => {
   const res = {
     code: vi.fn().mockReturnThis(),
     send: vi.fn(),
+    redirect: vi.fn(),
   }
   return res
 }
