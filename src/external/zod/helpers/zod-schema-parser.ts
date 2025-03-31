@@ -1,5 +1,5 @@
-import type { Schema, ZodIssue } from 'zod'
-import type { SchemaParseResult } from '@/infra/validation/ports/schema.validator'
+import { z } from 'zod'
+import type { SchemaParseResult } from '@/infra/validation/ports/schema-parse-result'
 import { SchemaValidationError } from '@/infra/validation/errors/schema-validation.error'
 
 type URLParam = 'param' | 'query'
@@ -7,7 +7,7 @@ type URLParamType = 'route param' | 'query param'
 type URLParamTypeReplacements = Record<URLParam, URLParamType>
 
 export abstract class ZodSchemaParser {
-  static parse<T = SchemaParseResult>(schema: Schema, data: unknown): T {
+  static parse<T = SchemaParseResult>(schema: z.Schema, data: unknown): T {
     const parsedSchema = schema.safeParse(data)
     if (!parsedSchema.success) {
       const error = ZodSchemaParser.formatErrorMessage(parsedSchema.error.errors[0])
@@ -16,7 +16,7 @@ export abstract class ZodSchemaParser {
     return parsedSchema.data
   }
 
-  private static formatErrorMessage (issue: ZodIssue) {
+  private static formatErrorMessage (issue: z.ZodIssue) {
     const paramPath = issue.path.join(' ')
     const param = ZodSchemaParser.normalizeURLParam(paramPath)
     if (!param) {
@@ -35,14 +35,14 @@ export abstract class ZodSchemaParser {
 
     let formattedParam = param
     const patterns: { [key: string]: string } = {
-      '^params ': "route param '",
-      '^query ': "query param '",
+      '^params ': 'route param \'',
+      '^query ': 'query param \'',
     }
 
     for (const [pattern, replacement] of Object.entries(patterns)) {
       const regex = new RegExp(pattern)
       if (regex.test(formattedParam)) {
-        formattedParam = `${formattedParam.replace(regex, replacement)}'`
+        formattedParam = formattedParam.replace(regex, replacement) + '\''
         break
       }
     }
