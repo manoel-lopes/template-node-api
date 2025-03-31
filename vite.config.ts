@@ -9,7 +9,7 @@ const exclude = [
 export default defineConfig({
   resolve: {
     alias: {
-      '@/': resolve('./src'),
+      '@/': resolve('./src/'),
     },
   },
   test: {
