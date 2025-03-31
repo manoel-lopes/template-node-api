@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { SchemaParseResult } from '@/infra/validation/ports/schema.validator'
+import type { SchemaParseResult } from '@/infra/validation/ports/schema-parse-result'
 import { SchemaValidationError } from '@/infra/validation/errors/schema-validation.error'
 
 type URLParam = 'param' | 'query'
