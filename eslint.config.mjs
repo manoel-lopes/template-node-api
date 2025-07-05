@@ -2,6 +2,7 @@ import eslint from '@eslint/js'
 import tseslint from 'typescript-eslint'
 import neostandard, { resolveIgnoresFromGitignore } from 'neostandard'
 import vitest from '@vitest/eslint-plugin'
+import unusedImports from 'eslint-plugin-unused-imports'
 
 export default [
   eslint.configs.recommended,
@@ -12,6 +13,7 @@ export default [
   {
     plugins: {
       vitest,
+      'unused-imports': unusedImports,
     },
     languageOptions: {
       globals: {
@@ -44,10 +46,17 @@ export default [
           'private',
           'private readonly'],
       }],
-      '@typescript-eslint/no-unused-vars': ['error', {
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-      }],
+      '@typescript-eslint/no-unused-vars': 'off',
+      'unused-imports/no-unused-imports': 'warn',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+        },
+      ],
     },
   },
 ]
