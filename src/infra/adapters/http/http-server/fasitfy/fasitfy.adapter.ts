@@ -1,20 +1,21 @@
+import type { FastifyInstance, FastifyReply, FastifyRequest, FastifySchemaCompiler } from 'fastify'
 import Fastify from 'fastify'
-import type { FastifyInstance, FastifyRequest, FastifyReply, FastifySchemaCompiler } from 'fastify'
 import {
   jsonSchemaTransform,
   serializerCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod'
+import type { Schema } from 'zod'
 import cors from '@fastify/cors'
 import { fastifySwagger } from '@fastify/swagger'
 import { fastifySwaggerUi } from '@fastify/swagger-ui'
-import type { Schema } from 'zod'
+
 import type {
+  ErrorHandler,
   HttpServer,
+  ListenOptions,
   Middleware,
   RouteOptions,
-  ListenOptions,
-  ErrorHandler,
   SchemaParser,
 } from '@/infra/adapters/http/ports/http-server'
 import type { HttpMethod } from '@/infra/http/ports/http-protocol'
