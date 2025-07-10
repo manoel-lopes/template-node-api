@@ -8,6 +8,12 @@
     "start:dev": "tsx --env-file .env.development --watch src/main/server.ts",
     "build": "tsup",
     "lint": "eslint src --fix",
+    "migrate": "dotenv -e .env -- prisma migrate dev",
+    "migrate:dev": "dotenv -e .env.development -- prisma migrate dev",
+    "migrate:test": "dotenv -e .env.test -- prisma migrate dev",
+    "migrate:reset": "dotenv -e .env -- prisma migrate reset",
+    "migrate:reset:dev": "dotenv -e .env.development -- prisma migrate reset",
+    "migrate:reset:test": "dotenv -e .env.test -- prisma migrate reset",
     "lint:staged": "lint-staged",
     "test:unit": "vitest --run --passWithNoTests --silent --reporter verbose",
     "test:unit:watch": "vitest --passWithNoTests --silent --reporter verbose",
@@ -20,6 +26,9 @@
     "db:up:dev": "dotenv -e .env.development -- docker-compose -p dev -f docker-compose.development.yml up --build -d",
     "db:up:test": "dotenv -e .env.test -- docker-compose -p test -f docker-compose.test.yml up --build -d",
     "prepare": "husky"
+  },
+  "prisma": {
+    "schema": "./prisma"
   },
   "dependencies": {
     "@fastify/cors": "11.0.1",
