@@ -18,6 +18,8 @@
     "test:ci": "vitest --run --silent --coverage",
     "test:dir": "vitest --run --silent --reporter verbose --dir",
     "db:up": "docker-compose up --build -d",
+    "db:up:dev": "dotenv -e .env.development -- docker-compose -p dev -f docker-compose.development.yml up --build -d",
+    "db:up:test": "dotenv -e .env.test -- docker-compose -p test -f docker-compose.test.yml up --build -d",
     "prepare": "husky"
   },
   "dependencies": {
